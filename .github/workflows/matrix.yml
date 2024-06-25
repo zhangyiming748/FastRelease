@@ -1,0 +1,22 @@
+name: Test matrix
+on:
+  workflow_dispatch: # 表示该workflow可以通过手动触发。在GitHub仓库中，你可以看到一个"Run workflow"按钮，点击后可以手动运行这个workflow
+        #  schedule: # 表示该workflow可以通过定时任务触发。在这个例子中，定时任务的时间表达式为00 23 * * *，表示每天的23点0分执行一次
+        #    - cron: '00 23 * * *'
+  push:
+    tags:
+      - "matrix*"
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node: [14, 16]
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Output node version
+        run: node --version
