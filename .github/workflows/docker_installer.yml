@@ -33,7 +33,7 @@ jobs:
             docker_desktop_installer_mac_x84_64.dmg
             docker_desktop_installer_linux_debian_x84_64.dmg
             docker_desktop_installer_linux_fedora_x84_64.dmg
-          tag_name: latest release
+          tag_name: latest_release
       - name: ls
         run: ls ${{ github.workspace }}
       - name: Upload Build Artifacts
