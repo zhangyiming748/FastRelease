@@ -35,7 +35,7 @@ jobs:
             docker_desktop_installer_mac_x84_64.dmg
             docker_desktop_installer_linux_debian_x84_64.dmg
             docker_desktop_installer_linux_fedora_x84_64.dmg
-          tag_name: ${{ time_var }}
+          tag_name: $time_var
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
