@@ -25,6 +25,7 @@ jobs:
           curl -o docker_desktop_installer_linux_debian_x84_64.dmg "https://desktop.docker.com/linux/main/amd64/149282/docker-desktop-4.30.0-amd64.deb"
           curl -o docker_desktop_installer_linux_fedora_x84_64.dmg "https://desktop.docker.com/linux/main/amd64/149282/docker-desktop-4.30.0-x86_64.rpm"
       - name: Release
+        run: time_var=$(date +"%Y%m%d-%H%M%S")
         uses: softprops/action-gh-release@v2
         with:
           files: |
@@ -34,7 +35,7 @@ jobs:
             docker_desktop_installer_mac_x84_64.dmg
             docker_desktop_installer_linux_debian_x84_64.dmg
             docker_desktop_installer_linux_fedora_x84_64.dmg
-          tag_name: ${{ strategy.job-index }}
+          tag_name: ${{ time_var }}
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
