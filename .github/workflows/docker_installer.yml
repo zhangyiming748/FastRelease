@@ -41,5 +41,5 @@ jobs:
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: $time_var
+          name: Docker installers
           path: ${{ github.workspace }}
