@@ -28,12 +28,15 @@ jobs:
       - name: Get image and version
         run: |
           TAG_NAME=$(echo ${{ github.ref }} | sed -e 's#refs/tags/##g')
-          ALPINE_PART=${TAG_NAME%%-*}}
+          NAME_PART=${TAG_NAME%%-*}
           VERSION_PART=${TAG_NAME#*-}
-          echo "Alpine part: $ALPINE_PART"
+          echo "Alpine part: $NAME_PART"
           echo "Version part: $VERSION_PART"
       - name: docker version
         run: docker version
+      - name: docker save
+        run: |
+          echo "docker save -o $NAME_PART-$VERSION_PART $NAME_PART:VERSION_PART"
 #      - name: Download installers
 #        run: |
 #          docker pull
