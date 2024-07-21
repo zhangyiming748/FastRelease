@@ -11,6 +11,10 @@ on:
 
 permissions:
   contents: write
+env:
+  TAG_NAME=$(echo ${{ github.ref }} | sed -e 's#refs/tags/##g')
+  NAME_PART=${env.TAG_NAME%%-*}
+  VERSION_PART=${env.TAG_NAME#*-}
 jobs:
   download_installer:
     runs-on: ubuntu-latest
@@ -27,16 +31,13 @@ jobs:
           echo "The tag name is $TAG_NAME"
       - name: Get image and version
         run: |
-          TAG_NAME=$(echo ${{ github.ref }} | sed -e 's#refs/tags/##g')
-          NAME_PART=${TAG_NAME%%-*}
-          VERSION_PART=${TAG_NAME#*-}
-          echo "Alpine part: $NAME_PART"
-          echo "Version part: $VERSION_PART"
+          echo "Alpine part: ${{ NAME_PART }}"
+          echo "Version part: ${{ VERSION_PART }}"
       - name: docker version
         run: docker version
       - name: docker save
         run: |
-          echo "docker save -o $NAME_PART-$VERSION_PART $NAME_PART:VERSION_PART"
+          echo "docker save -o ${{ NAME_PART }}-${{ VERSION_PART }} ${{ NAME_PART }}:${{ VERSION_PART }}"
 #      - name: Download installers
 #        run: |
 #          docker pull
