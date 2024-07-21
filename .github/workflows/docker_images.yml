@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   push:
     tags:
-      #- "alpine-3.20.1"
+      #- "alpine-3.18"
       - "*-*"
 permissions:
   contents: write
