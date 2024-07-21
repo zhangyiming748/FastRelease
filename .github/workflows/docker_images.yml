@@ -37,6 +37,7 @@ jobs:
         with:
           files: |
             *.tar
+          tag_name: $(echo ${{ github.ref }} | sed -e 's#refs/tags/##g')
 #      - name: ls
 #        run: ls ${{ github.workspace }}
 #      - name: Upload Build Artifacts
