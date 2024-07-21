@@ -37,7 +37,7 @@ jobs:
         with:
           files: |
             *.tar
-          tag_name: last release
+          tag_name: "last release"
 #      - name: ls
 #        run: ls ${{ github.workspace }}
 #      - name: Upload Build Artifacts
