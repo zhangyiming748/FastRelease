@@ -28,22 +28,13 @@ jobs:
           VERSION_PART=${TAG_NAME#*-}
           echo "Alpine part: $NAME_PART"
           echo "Version part: $VERSION_PART"
-          echo "docker save -o $NAME_PART-$VERSION_PART.tar $NAME_PART:$VERSION_PART"
-#      - name: Download installers
-#        run: |
-#          docker pull
-#          docker save -o
-#      - name: Release
-#        uses: softprops/action-gh-release@v2
-#        with:
-#          files: |
-#            linux.sh
-#            docker_desktop_installer_windows_x86_64.exe
-#            docker_desktop_installer_mac_arm64.dmg
-#            docker_desktop_installer_mac_x84_64.dmg
-#            docker_desktop_installer_linux_debian_x84_64.dmg
-#            docker_desktop_installer_linux_fedora_x84_64.dmg
-#          tag_name: latest_release
+          FILE_NAME=$NAME_PART-$VERSION_PART.tar
+          echo "docker save -o $FILE_NAME $NAME_PART:$VERSION_PART"
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            *.tar
 #      - name: ls
 #        run: ls ${{ github.workspace }}
 #      - name: Upload Build Artifacts
