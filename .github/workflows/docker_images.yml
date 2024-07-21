@@ -11,6 +11,9 @@ on:
 
 permissions:
   contents: write
+env:
+  image
+  version
 jobs:
   download_installer:
     runs-on: ubuntu-latest
@@ -30,9 +33,16 @@ jobs:
           TAG_NAME=$(echo ${{ github.ref }} | sed -e 's#refs/tags/##g')
           NAME_PART=${TAG_NAME%%-*}
           VERSION_PART=${TAG_NAME#*-}
+          ${{ env.image }} = NAME_PART
+          ${{ env.version }} = VERSION_PART
+          
           echo "Alpine part: $NAME_PART"
           echo "Version part: $VERSION_PART"
-          echo "docker save -o $NAME_PART-$VERSION_PART $NAME_PART:VERSION_PART"
+          echo "docker save -o $NAME_PART-$VERSION_PART.tar $NAME_PART:$VERSION_PART"
+      - name: global env
+        run : |
+          echo ${{ env.image }}
+          echo ${{ env.version }}
 #      - name: Download installers
 #        run: |
 #          docker pull
