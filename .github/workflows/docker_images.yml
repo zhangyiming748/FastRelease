@@ -19,6 +19,10 @@ jobs:
         run: echo "The current tag is ${{ github.ref }}"
       - name: Get event.tags
         run : echo "The current tag is ${{ github.event.ref }}"
+      - name: Get purge tag nam
+        run : |
+          TAG_NAME=$(echo ${{ github.ref }} | sed -e 's#refs/tags/##g')
+          echo "The tag name is $TAG_NAME"
 #      - name: Download installers
 #        run: |
 #          docker pull
