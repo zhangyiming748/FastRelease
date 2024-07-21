@@ -2,11 +2,13 @@ name: Docker Imager Download
 
 on:
   workflow_dispatch: # 表示该workflow可以通过手动触发。在GitHub仓库中，你可以看到一个"Run workflow"按钮，点击后可以手动运行这个workflow
-#  schedule: # 表示该workflow可以通过定时任务触发。在这个例子中，定时任务的时间表达式为00 23 * * *，表示每天的23点0分执行一次
-#    - cron: '00 23 * * *'
+  #  schedule: # 表示该workflow可以通过定时任务触发。在这个例子中，定时任务的时间表达式为00 23 * * *，表示每天的23点0分执行一次
+  #    - cron: '00 23 * * *'
   push:
     tags:
-      - "images*"
+      #- "images:alpine:3.20.1"
+      - "images:*"
+
 permissions:
   contents: write
 jobs:
@@ -18,11 +20,17 @@ jobs:
       - name: Get ref.tags
         run: echo "The current tag is ${{ github.ref }}"
       - name: Get event.tags
-        run : echo "The current tag is ${{ github.event.ref }}"
+        run: echo "The current tag is ${{ github.event.ref }}"
       - name: Get purge tag nam
-        run : |
+        run: |
           TAG_NAME=$(echo ${{ github.ref }} | sed -e 's#refs/tags/##g')
           echo "The tag name is $TAG_NAME"
+      - name: Get image and version
+        run: |
+          TAG_NAME=${{ github.ref }}
+          IMAGE_NAME=$(echo $TAG_NAME | cut -d ':' -f 1)
+          IMAGE_VERSION=$(echo $TAG_NAME | cut -d ':' -f 2)
+          echo "Image name: $IMAGE_NAME, Image version: $IMAGE_VERSION"
 #      - name: Download installers
 #        run: |
 #          docker pull
