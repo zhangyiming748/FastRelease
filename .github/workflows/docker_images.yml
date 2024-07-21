@@ -6,8 +6,8 @@ on:
   #    - cron: '00 23 * * *'
   push:
     tags:
-      #- "images:alpine:3.20.1"
-      - "images:*"
+      #- "alpine-3.20.1"
+      - "*-*"
 
 permissions:
   contents: write
@@ -28,9 +28,10 @@ jobs:
       - name: Get image and version
         run: |
           TAG_NAME=${{ github.ref }}
-          IMAGE_NAME=$(echo $TAG_NAME | cut -d ':' -f 1)
-          IMAGE_VERSION=$(echo $TAG_NAME | cut -d ':' -f 2)
-          echo "Image name: $IMAGE_NAME, Image version: $IMAGE_VERSION"
+          ALPINE_PART=${TAG_NAME%%-*}}
+          VERSION_PART=${TAG_NAME#*-}
+          echo "Alpine part: $ALPINE_PART"
+          echo "Version part: $VERSION_PART"
 #      - name: Download installers
 #        run: |
 #          docker pull
