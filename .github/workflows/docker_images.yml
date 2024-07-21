@@ -6,7 +6,7 @@ on:
 #    - cron: '00 23 * * *'
   push:
     tags:
-      - "docker images*"
+      - "images*"
 permissions:
   contents: write
 jobs:
