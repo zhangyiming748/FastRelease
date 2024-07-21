@@ -1,19 +1,12 @@
 name: Docker Imager Download
-
 on:
-  workflow_dispatch: # 表示该workflow可以通过手动触发。在GitHub仓库中，你可以看到一个"Run workflow"按钮，点击后可以手动运行这个workflow
-  #  schedule: # 表示该workflow可以通过定时任务触发。在这个例子中，定时任务的时间表达式为00 23 * * *，表示每天的23点0分执行一次
-  #    - cron: '00 23 * * *'
+  workflow_dispatch:
   push:
     tags:
       #- "alpine-3.20.1"
       - "*-*"
-
 permissions:
   contents: write
-env:
-  image: ""
-  version: ""
 jobs:
   download_installer:
     runs-on: ubuntu-latest
@@ -33,16 +26,9 @@ jobs:
           TAG_NAME=$(echo ${{ github.ref }} | sed -e 's#refs/tags/##g')
           NAME_PART=${TAG_NAME%%-*}
           VERSION_PART=${TAG_NAME#*-}
-          ${{ env.image }} = $NAME_PART
-          ${{ env.version }} = $VERSION_PART
-          
           echo "Alpine part: $NAME_PART"
           echo "Version part: $VERSION_PART"
           echo "docker save -o $NAME_PART-$VERSION_PART.tar $NAME_PART:$VERSION_PART"
-      - name: global env
-        run : |
-          echo ${{ env.image }}
-          echo ${{ env.version }}
 #      - name: Download installers
 #        run: |
 #          docker pull
