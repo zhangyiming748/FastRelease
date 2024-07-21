@@ -29,7 +29,7 @@ jobs:
           echo "Alpine part: $NAME_PART"
           echo "Version part: $VERSION_PART"
           FILE_NAME=$NAME_PART-$VERSION_PART.tar
-          echo "docker save -o $FILE_NAME $NAME_PART:$VERSION_PART"
+          docker save -o $FILE_NAME $NAME_PART:$VERSION_PART
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
