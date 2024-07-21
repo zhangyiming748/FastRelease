@@ -38,10 +38,8 @@ jobs:
           files: |
             *.tar
           tag_name: "last_release"
-#      - name: ls
-#        run: ls ${{ github.workspace }}
-#      - name: Upload Build Artifacts
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: Docker installers
-#          path: ${{ github.workspace }}
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Docker Image tar
+          path: ${{ github.workspace }}/*.tar
