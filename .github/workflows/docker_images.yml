@@ -33,8 +33,8 @@ jobs:
           TAG_NAME=$(echo ${{ github.ref }} | sed -e 's#refs/tags/##g')
           NAME_PART=${TAG_NAME%%-*}
           VERSION_PART=${TAG_NAME#*-}
-          echo "::set-env name=image::$NAME_PART"
-          echo "::set-env name=version::$VERSION_PART"
+          ${{ env.image }} = $NAME_PART
+          ${{ env.version }} = $VERSION_PART
           
           echo "Alpine part: $NAME_PART"
           echo "Version part: $VERSION_PART"
