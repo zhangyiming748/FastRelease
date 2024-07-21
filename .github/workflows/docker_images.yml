@@ -1,0 +1,43 @@
+name: Docker Imager Download
+
+on:
+  workflow_dispatch: # 表示该workflow可以通过手动触发。在GitHub仓库中，你可以看到一个"Run workflow"按钮，点击后可以手动运行这个workflow
+#  schedule: # 表示该workflow可以通过定时任务触发。在这个例子中，定时任务的时间表达式为00 23 * * *，表示每天的23点0分执行一次
+#    - cron: '00 23 * * *'
+  push:
+    tags:
+      - "docker images*"
+permissions:
+  contents: write
+jobs:
+  download_installer:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Get ref.tags
+        run: echo "The current tag is ${{ github.ref }}"
+      - name: Get event.tags
+        run : echo "The current tag is ${{ github.event.ref }}"
+#      - name: Download installers
+#        run: |
+#          docker pull
+#          docker save -o
+#      - name: Release
+#        uses: softprops/action-gh-release@v2
+#        with:
+#          files: |
+#            linux.sh
+#            docker_desktop_installer_windows_x86_64.exe
+#            docker_desktop_installer_mac_arm64.dmg
+#            docker_desktop_installer_mac_x84_64.dmg
+#            docker_desktop_installer_linux_debian_x84_64.dmg
+#            docker_desktop_installer_linux_fedora_x84_64.dmg
+#          tag_name: latest_release
+#      - name: ls
+#        run: ls ${{ github.workspace }}
+#      - name: Upload Build Artifacts
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: Docker installers
+#          path: ${{ github.workspace }}
