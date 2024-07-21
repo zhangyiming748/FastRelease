@@ -12,8 +12,8 @@ on:
 permissions:
   contents: write
 env:
-  image:""
-  version:""
+  image: ""
+  version: ""
 jobs:
   download_installer:
     runs-on: ubuntu-latest
