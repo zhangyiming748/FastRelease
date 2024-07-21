@@ -30,7 +30,8 @@ jobs:
           echo "Version part: $VERSION_PART"
           FILE_NAME=$NAME_PART-$VERSION_PART.tar
           IMAGE_NAME=$NAME_PART:$VERSION_PART
-          echo "docker save -o $FILE_NAME $IMAGE_NAME"
+          docker pull $IMAGE_NAME
+          docker save -o $FILE_NAME $IMAGE_NAME
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
