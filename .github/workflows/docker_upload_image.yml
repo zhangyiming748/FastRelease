@@ -28,6 +28,11 @@ jobs:
         run: |
           echo "这是一个测试文件" > test2.txt
           BaiduPCS-Go upload test2.txt /docker
+      - name: get and upload
+        run: |
+          docker pull openkylin/openkylin:2.0
+          docker save -o openkylin2.0.tar openkylin/openkylin:2.0
+          BaiduPCS-Go upload openkylin2.0.tar /docker
 #      - name: Set up Docker Buildx
 #        uses: docker/setup-buildx-action@v3
 #
