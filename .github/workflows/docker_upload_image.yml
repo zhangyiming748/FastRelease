@@ -1,15 +1,15 @@
-name: Publish Docker Image
+name: Upload Docker Image
 
 on:
   workflow_dispatch:
   push:
-    branch:
-      - 'master'
+#    branches:
+#      - 'master'
     tags:
       - 'upload*'
 
 jobs:
-  build-and-push:
+  build-and-upload:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -26,8 +26,8 @@ jobs:
           BaiduPCS-Go tree /
       - name: upload test
         run: |
-          echo "这是一个测试文件" > test.txt
-          BaiduPCS-Go upload test.txt /docker
+          echo "这是一个测试文件" > test2.txt
+          BaiduPCS-Go upload test2.txt /docker
 #      - name: Set up Docker Buildx
 #        uses: docker/setup-buildx-action@v3
 #
