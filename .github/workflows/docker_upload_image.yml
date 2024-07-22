@@ -15,7 +15,7 @@ jobs:
         run: |
           wget -O BaiduPCS.zip https://github.com/qjfoidnh/BaiduPCS-Go/releases/download/v3.9.5/BaiduPCS-Go-v3.9.5-linux-amd64.zip
           unzip BaiduPCS.zip
-          find . -name "BaiduPCS-Go" -exec mv {} /usr/local/bin
+          find . -name "BaiduPCS-Go" -exec mv {} /usr/local/bin \;
           which -a BaiduPCS-Go
 #      - name: Set up Docker Buildx
 #        uses: docker/setup-buildx-action@v3
