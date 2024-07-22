@@ -1,0 +1,41 @@
+name: Publish Docker Image
+
+on:
+  push:
+    tags:
+      - 'upload*'
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: set Baidu-pcs
+        run: |
+          wget -O BaiduPCS.zip https://github.com/qjfoidnh/BaiduPCS-Go/releases/download/v3.9.5/BaiduPCS-Go-v3.9.5-linux-amd64.zip
+          unzip BaiduPCS.zip
+          find . -name "BaiduPCS-Go" -exec mv {} /usr/local/bin
+          which -a BaiduPCS-Go
+#      - name: Set up Docker Buildx
+#        uses: docker/setup-buildx-action@v3
+#
+#      - name: Log in to Docker Hub
+#        uses: docker/login-action@v3
+#        with:
+#          username: ${{ secrets.DOCKER_USERNAME }}
+#          password: ${{ secrets.DOCKER_PASSWORD }}
+#
+#      - name: Extract Docker metadata
+#        id: meta
+#        uses: docker/metadata-action@v5
+#        with:
+#          images: zhangyiming748/workflow
+#
+#      - name: Build and push Docker image
+#        uses: docker/build-push-action@v5
+#        with:
+#          context: .
+#          push: true
+#          tags: ${{ steps.meta.outputs.tags }}
+#          labels: ${{ steps.meta.outputs.labels }}
