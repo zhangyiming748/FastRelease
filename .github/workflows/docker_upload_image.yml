@@ -1,0 +1,35 @@
+name: Upload Docker Image
+
+on:
+  workflow_dispatch:
+  push:
+#    branches:
+#      - 'master'
+    tags:
+      - 'upload*'
+
+jobs:
+  build-and-upload:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: set BaiduPCS
+        run: |
+          wget -O BaiduPCS.zip https://github.com/qjfoidnh/BaiduPCS-Go/releases/download/v3.9.5/BaiduPCS-Go-v3.9.5-linux-amd64.zip
+          unzip BaiduPCS.zip
+          find . -name "BaiduPCS-Go" -exec mv {} /usr/local/bin \;
+          which -a BaiduPCS-Go
+      - name : login BaiduPCS
+        run: |
+          BaiduPCS-Go login -bduss=${{ secrets.NEW_BDUSS }}  -stoken=${{ secrets.NEW_STOKEN }}
+          BaiduPCS-Go tree /
+      - name: upload test
+        run: |
+          echo "这是一个测试文件" > test2.txt
+          BaiduPCS-Go upload test2.txt /docker
+      - name: get and upload
+        run: |
+          docker pull openkylin/openkylin:2.0
+          docker save -o openkylin2.0.tar openkylin/openkylin:2.0
+          BaiduPCS-Go upload openkylin2.0.tar /docker
