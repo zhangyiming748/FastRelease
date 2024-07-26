@@ -34,4 +34,4 @@ jobs:
           docker save -o rocket.tar zhangyiming748/rocket_chat:latest
           xz -9ek rocket.tar
           ls -ahl rocket.tar.xz
-          BaiduPCS-Go upload rocket.tar /docker
+          BaiduPCS-Go upload rocket.tar.xz /docker
