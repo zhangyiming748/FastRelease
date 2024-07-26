@@ -31,7 +31,7 @@ jobs:
       - name: get and upload
         run: |
           docker pull zhangyiming748/rocket_chat:latest
-          docker save -o rocket.tar zhangyiming748/rocket_chat:latest
+          docker save zhangyiming748/rocket_chat:latest | xz -9e rocker.tar.xz
           xz -9ek rocket.tar
           ls -ahl rocket.tar.xz
           BaiduPCS-Go upload rocket.tar.xz /docker
