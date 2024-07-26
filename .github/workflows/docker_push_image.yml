@@ -28,7 +28,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: zhangyiming748/workflow
+          images: zhangyiming748/rocket_chat
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
