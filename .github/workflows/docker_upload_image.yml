@@ -24,12 +24,14 @@ jobs:
         run: |
           BaiduPCS-Go login -bduss=${{ secrets.NEW_BDUSS }}  -stoken=${{ secrets.NEW_STOKEN }}
           BaiduPCS-Go tree /
-      - name: upload test
-        run: |
-          echo "这是一个测试文件" > test2.txt
-          BaiduPCS-Go upload test2.txt /docker
+#      - name: upload test
+#        run: |
+#          echo "这是一个测试文件" > test2.txt
+#          BaiduPCS-Go upload test2.txt /docker
       - name: get and upload
         run: |
-          docker pull openkylin/openkylin:2.0
-          docker save -o openkylin2.0.tar openkylin/openkylin:2.0
-          BaiduPCS-Go upload openkylin2.0.tar /docker
+          docker pull zhangyiming748/rocket_chat:latest
+          docker save -o rocket.tar zhangyiming748/rocket_chat:latest
+          xz -9ek rocket.tar
+          ls -ahl rocket.tar.xz
+          BaiduPCS-Go upload rocket.tar /docker
