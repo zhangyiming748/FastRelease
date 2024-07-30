@@ -1,0 +1,29 @@
+name: Linux Kernel Download
+
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  download_installer:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Get Time
+        run: echo ${{ github.event.workflow_run.head_commit.timestamp }}
+      - name: Get Kernel
+        run: |
+          git clone https://github.com/torvalds/linux.git ${{ github.event.workflow_run.head_commit.timestamp }}
+          tar cvf ${{ github.event.workflow_run.head_commit.timestamp }}.tar ${{ github.event.workflow_run.head_commit.timestamp }}
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            ${{ github.event.workflow_run.head_commit.timestamp }}.tar
+          tag_name: latest_release
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Docker installers
+          path: ${{ github.event.workflow_run.head_commit.timestamp }}
