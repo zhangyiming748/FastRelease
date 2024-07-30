@@ -16,7 +16,7 @@ jobs:
       - name: Get Kernel
         run: |
           git clone https://github.com/torvalds/linux.git ${{ github.event.workflow_run.head_commit.timestamp }}
-          tar cvf linux.tar linuxh
+          tar cvf linux.tar linux
           ls -alh linux.tar
           xz -9k linux.tar
       - name: ls
