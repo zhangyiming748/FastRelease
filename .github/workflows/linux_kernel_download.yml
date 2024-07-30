@@ -5,7 +5,7 @@ on:
 permissions:
   contents: write
 jobs:
-  download_installer:
+  download_kernel:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
