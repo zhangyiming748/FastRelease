@@ -11,7 +11,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Get Time
-        run: echo ${{ github.event.workflow_run.head_commit.timestamp }}
+        run: |
+          echo "Workflow triggered at: ${{ github.event.created_at }}"
       - name: Get Kernel
         run: |
           git clone https://github.com/torvalds/linux.git ${{ github.event.workflow_run.head_commit.timestamp }}
