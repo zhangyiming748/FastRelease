@@ -16,10 +16,11 @@ jobs:
           echo "Current time is: $CURRENT_TIME"
       - name: Get Kernel
         run: |
-          git clone https://github.com/torvalds/linux.git ${{ github.event.workflow_run.head_commit.timestamp }}
-          tar cvf linux.tar linux
-          ls -alh linux.tar
-          xz -9k linux.tar
+          git clone https://github.com/torvalds/linux.git 
+      - name: tar
+        run: tar cvf linux.tar linux
+      - name: xz
+        run: xz -9ev linux.tar
       - name: ls
         run: |
           ls -alh
