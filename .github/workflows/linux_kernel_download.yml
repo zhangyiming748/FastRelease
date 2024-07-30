@@ -16,17 +16,21 @@ jobs:
       - name: Get Kernel
         run: |
           git clone https://github.com/torvalds/linux.git ${{ github.event.workflow_run.head_commit.timestamp }}
-          tar cvf linux.tar linux
+          tar cvf linux.tar linuxh
+          ls -alh linux.tar
+          xz -9k linux.tar
+      - name: ls
+        run: |
+          ls -alh
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            linux.tar
+            linux.tar.xz
           tag_name: latest_release
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: Docker installers
           path: |
-            linux
-            linux.tar
+            linux.tar.xz
