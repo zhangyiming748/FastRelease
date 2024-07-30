@@ -12,7 +12,8 @@ jobs:
         uses: actions/checkout@v4
       - name: Get Time
         run: |
-          echo "Workflow triggered at: ${{ github.event.created_at }}"
+          CURRENT_TIME=$(date)
+          echo "Current time is: $CURRENT_TIME"
       - name: Get Kernel
         run: |
           git clone https://github.com/torvalds/linux.git ${{ github.event.workflow_run.head_commit.timestamp }}
