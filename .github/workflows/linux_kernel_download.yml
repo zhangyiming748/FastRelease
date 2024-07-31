@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: get version
         run: |
-          apt install neofetch
+          sudo apt install neofetch
           neofetch
           xz
       - name: Checkout repository
