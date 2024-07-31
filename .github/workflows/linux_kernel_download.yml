@@ -19,6 +19,10 @@ jobs:
           git clone https://github.com/torvalds/linux.git 
       - name: tar
         run: tar cvf linux.tar linux
+      - name: split
+        run: |
+          split -b 1.5G linux.tar linux.tar.part
+          ls -al
       - name: xz
         run: xz -9ev linux.tar
       - name: ls
