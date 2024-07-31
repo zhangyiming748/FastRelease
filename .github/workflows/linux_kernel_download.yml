@@ -23,17 +23,21 @@ jobs:
         run: |
           split -b 1500m linux.tar linux.tar.part
           ls -al
-      - name: xz
-        run: xz -9ev linux.tar
+#      - name: xz
+#        run: xz -9ev linux.tar
       - name: ls
         run: |
           ls -alh
-      # - name: Release
-      #   uses: softprops/action-gh-release@v2
-      #   with:
-      #     files: |
-      #       linux.tar.xz
-      #     tag_name: latest_release
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            linux.tar.partaa
+            linux.tar.partab
+            linux.tar.partac
+            linux.tar.partad
+            linux.tar.partae
+          tag_name: latest_linux_repo
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
