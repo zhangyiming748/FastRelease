@@ -17,7 +17,8 @@ jobs:
         run: |
           wget https://mega.nz/linux/repo/xUbuntu_22.04/amd64/megacmd-xUbuntu_22.04_amd64.deb 
           sudo apt install "$PWD/megacmd-xUbuntu_22.04_amd64.deb"
-          mega-login ${{ secrets.MEGA_EMAIL }} ${{ secrets.MEGA_PASSWORD }}
+      - name: mega login
+        run:  mega-login ${{ secrets.MEGA_EMAIL }} ${{ secrets.MEGA_PASSWORD }}
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Get Time
@@ -36,7 +37,7 @@ jobs:
           ls -alh
       - name: mega
         run: |
-
+          mega-put linux.tar.xz /kernel
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
