@@ -21,7 +21,7 @@ jobs:
         run: tar cvf linux.tar linux
       - name: split
         run: |
-          split -b 1.5G linux.tar linux.tar.part
+          split -b 1500m linux.tar linux.tar.part
           ls -al
       - name: xz
         run: xz -9ev linux.tar
