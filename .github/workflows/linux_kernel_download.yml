@@ -8,15 +8,16 @@ jobs:
   download_kernel:
     runs-on: ubuntu-latest
     steps:
-      - name: get version
-        run: |
-          sudo apt install neofetch
-          neofetch
+#      - name: get version
+#        run: |
+#          sudo apt install neofetch
+#          neofetch
 #          ubuntu22.04
       - name: Get MegaCMD
         run: |
           wget https://mega.nz/linux/repo/xUbuntu_22.04/amd64/megacmd-xUbuntu_22.04_amd64.deb 
           sudo apt install "$PWD/megacmd-xUbuntu_22.04_amd64.deb"
+          mega-login ${{ secrets.MEGA_EMAIL }} ${{ secrets.MEGA_PASSWORD }}
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Get Time
@@ -35,7 +36,7 @@ jobs:
           ls -alh
       - name: mega
         run: |
-          apt install -y megacmd
+
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
