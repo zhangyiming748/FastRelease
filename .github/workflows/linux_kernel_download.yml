@@ -8,6 +8,11 @@ jobs:
   download_kernel:
     runs-on: ubuntu-latest
     steps:
+      - name: get version
+        run: |
+          apt install neofetch
+          neofetch
+          xz
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Get Time
@@ -19,25 +24,14 @@ jobs:
           git clone https://github.com/torvalds/linux.git 
       - name: tar
         run: tar cvf linux.tar linux
-      - name: split
-        run: |
-          split -b 1500m linux.tar linux.tar.part
-          ls -al
-#      - name: xz
-#        run: xz -9ev linux.tar
+      - name: xz
+        run: xz -9ev linux.tar
       - name: ls
         run: |
           ls -alh
-      - name: Release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: |
-            linux.tar.partaa
-            linux.tar.partab
-            linux.tar.partac
-            linux.tar.partad
-            linux.tar.partae
-          tag_name: latest_linux_repo
+      - name: mega
+        run: |
+          apt install -y megacmd
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
