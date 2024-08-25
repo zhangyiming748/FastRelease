@@ -1,13 +1,13 @@
-# 默认注释了源码镜像以提高 apt update 速度，如有需要可自行取消注释
-deb http://mirrors4.tuna.tsinghua.edu.cn/debian/ bullseye main contrib non-free
-deb-src http://mirrors4.tuna.tsinghua.edu.cn/debian/ bullseye main contrib non-free
+Types: deb
+# http://snapshot.debian.org/archive/debian/20240701T000000Z
+URIs: http://deb.debian.org/debian
+Suites: bookworm bookworm-updates bookworm-backports
+Components: main contrib non-free non-free-firmware 
+Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
 
-deb http://mirrors4.tuna.tsinghua.edu.cn/debian/ bullseye-updates main contrib non-free
-deb-src http://mirrors4.tuna.tsinghua.edu.cn/debian/ bullseye-updates main contrib non-free
-
-deb http://mirrors4.tuna.tsinghua.edu.cn/debian/ bullseye-backports main contrib non-free
-deb-src http://mirrors4.tuna.tsinghua.edu.cn/debian/ bullseye-backports main contrib non-free
-
-# 以下安全更新软件源包含了官方源与镜像站配置，如有需要可自行修改注释切换
-deb http://mirrors4.tuna.tsinghua.edu.cn/debian-security bullseye-security main contrib non-free
-deb-src http://mirrors4.tuna.tsinghua.edu.cn/debian-security bullseye-security main contrib non-free
+Types: deb
+# http://snapshot.debian.org/archive/debian-security/20240701T000000Z
+URIs: http://deb.debian.org/debian-security
+Suites: bookworm-security
+Components: main
+Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg

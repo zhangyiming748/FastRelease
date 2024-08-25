@@ -1,10 +1,26 @@
-FROM node:14.21.3-bullseye
-# COPY sources.list /etc/apt/sources.list
+FROM golang:1.23.0-bookworm
+# docker run -dit -v /Users/zen/Github/WhisperAndTrans:/data --name test golang:1.22.4-bookworm bash
+LABEL authors="zen"
+# 更换国内源
+COPY sources.list /etc/apt/sources.list.d/debian.sources
+# 更新软件
 RUN apt update
-RUN apt install -y git
-RUN git clone https://github.com/RocketChat/Rocket.Chat.git /rocket
-WORKDIR /rocket
-RUN curl https://install.meteor.com/ | sh
-RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-RUN yarn install
+RUN apt install -y python3 python3-pip translate-shell ffmpeg ca-certificates bsdmainutils sqlite3 gawk locales libfribidi-bin dos2unix
+RUN apt-get clean
+# 配置pip
+# RUN pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+# 安装openai-whisper
+RUN rm /usr/lib/python3.11/EXTERNALLY-MANAGED
+RUN pip install openai-whisper --break-system-packages --no-cache-dir
+# 复制go程序
+#RUN mkdir /app
+#WORKDIR /app
+#COPY . .
+# 配置env
+RUN go env -w GO111MODULE=on
+# RUN go env -w GOPROXY=https://goproxy.cn,direct
+RUN go env -w GOBIN=/go/bin
+RUN go mod vendor
+# 启动程序
+#ENTRYPOINT ["go", "run","/app/main.go"]
+CMD ["bash"]
