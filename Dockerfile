@@ -11,14 +11,14 @@ RUN apt-get clean
 # RUN pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 # 安装openai-whisper
 RUN rm /usr/lib/python3.11/EXTERNALLY-MANAGED
-RUN pip install openai-whisper --break-system-packages --no-cache-dir
+RUN pip install openai-whisper yt-dlp --break-system-packages --no-cache-dir
 # 复制go程序
 #RUN mkdir /app
 #WORKDIR /app
 #COPY . .
 # 配置env
 RUN go env -w GO111MODULE=on
-# RUN go env -w GOPROXY=https://goproxy.cn,direct
+RUN go env -w GOPROXY=https://goproxy.cn,direct
 RUN go env -w GOBIN=/go/bin
 # RUN go mod vendor
 # 启动程序
