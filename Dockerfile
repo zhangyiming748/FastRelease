@@ -23,4 +23,5 @@ RUN go env -w GOBIN=/go/bin
 # RUN go mod vendor
 # 启动程序
 #ENTRYPOINT ["go", "run","/app/main.go"]
+WORKDIR /
 CMD ["bash"]
