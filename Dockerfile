@@ -17,8 +17,8 @@ COPY badupcs_amd64.zip /root
 COPY badupcs_arm64.zip /root
 
 # 解压 BaiduPCS-Go
-RUN 7z x /root/badupcs_amd64.zip -o/root/badupcs_amd64 && \
-    7z x /root/badupcs_arm64.zip -o/root/badupcs_arm64 && \
+RUN 7z x /root/badupcs_amd64.zip  && \
+    7z x /root/badupcs_arm64.zip  && \
     rm /root/badupcs_amd64.zip /root/badupcs_arm64.zip
 
 RUN apt-get clean
