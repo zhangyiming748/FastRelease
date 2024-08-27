@@ -27,7 +27,7 @@ RUN apt-get clean
 
 # 安装 openai-whisper
 RUN rm /usr/lib/python3.11/EXTERNALLY-MANAGED && \
-    pip install openai-whisper --break-system-packages --no-cache-dir
+    pip install openai-whisper yt-dlp --break-system-packages --no-cache-dir
 
 # 配置 Go 环境
 RUN go env -w GO111MODULE=on && \

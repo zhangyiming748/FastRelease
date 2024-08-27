@@ -25,8 +25,9 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Download BaiduPcs
         run: |
-          curl -o badupcs_amd64.zip "https://github.com/qjfoidnh/BaiduPCS-Go/releases/download/v3.9.5/BaiduPCS-Go-v3.9.5-linux-amd64.zip"
-          curl -o badupcs_arm64.zip "https://github.com/qjfoidnh/BaiduPCS-Go/releases/download/v3.9.5/BaiduPCS-Go-v3.9.5-linux-arm64.zip"
+          wget -O badupcs_amd64.zip "https://github.com/qjfoidnh/BaiduPCS-Go/releases/download/v3.9.5/BaiduPCS-Go-v3.9.5-linux-amd64.zip"
+          wget -O badupcs_arm64.zip "https://github.com/qjfoidnh/BaiduPCS-Go/releases/download/v3.9.5/BaiduPCS-Go-v3.9.5-linux-arm64.zip"
+          ls -ahlt
       - name: Extract Docker metadata
         id: meta
         uses: docker/metadata-action@v5
