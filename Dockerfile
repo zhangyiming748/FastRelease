@@ -11,16 +11,17 @@ RUN apt-get update && \
     bsdmainutils sqlite3 gawk locales libfribidi-bin dos2unix p7zip-full \
     wget curl && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/* \
+    rm -rf /var/lib/apt/lists/*
 
 COPY badupcs_amd64.zip /root
 COPY badupcs_arm64.zip /root
-
+WORKDIR /root
 # 解压 BaiduPCS-Go
-RUN 7z x /root/badupcs_amd64.zip
-RUN 7z x /root/badupcs_arm64.zip
-RUN rm /root/badupcs_amd64.zip
-RUN rm /root/badupcs_arm64.zip
+RUN ls -al
+RUN 7z x badupcs_amd64.zip
+RUN 7z x badupcs_arm64.zip
+RUN rm badupcs_amd64.zip
+RUN rm badupcs_arm64.zip
 
 RUN apt-get clean
 
@@ -30,7 +31,7 @@ RUN rm /usr/lib/python3.11/EXTERNALLY-MANAGED && \
 
 # 配置 Go 环境
 RUN go env -w GO111MODULE=on && \
-    go env -w GOBIN=/go/bin \
+    go env -w GOBIN=/go/bin
 
 # 启动程序
 #ENTRYPOINT ["go", "run","/app/main.go"]
