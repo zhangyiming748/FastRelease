@@ -4,23 +4,33 @@ LABEL authors="zen"
 # 更换国内源
 COPY sources.list /etc/apt/sources.list.d/debian.sources
 # 更新软件
-RUN apt update
-RUN apt install -y python3 python3-pip translate-shell ffmpeg ca-certificates bsdmainutils sqlite3 gawk locales libfribidi-bin dos2unix
+# 更新软件并安装依赖
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    python3 python3-pip translate-shell ffmpeg ca-certificates \
+    bsdmainutils sqlite3 gawk locales libfribidi-bin dos2unix p7zip-full \
+    wget curl && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* \
+
+COPY badupcs_amd64.zip /root
+COPY badupcs_arm64.zip /root
+
+# 解压 BaiduPCS-Go
+RUN 7z x /root/badupcs_amd64.zip -o/root/badupcs_amd64 && \
+    7z x /root/badupcs_arm64.zip -o/root/badupcs_arm64 && \
+    rm /root/badupcs_amd64.zip /root/badupcs_arm64.zip
+
 RUN apt-get clean
-# 配置pip
-# RUN pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
-# 安装openai-whisper
-RUN rm /usr/lib/python3.11/EXTERNALLY-MANAGED
-RUN pip install openai-whisper --break-system-packages --no-cache-dir
-# 复制go程序
-#RUN mkdir /app
-#WORKDIR /app
-#COPY . .
-# 配置env
-RUN go env -w GO111MODULE=on
-# RUN go env -w GOPROXY=https://goproxy.cn,direct
-RUN go env -w GOBIN=/go/bin
-# RUN go mod vendor
+
+# 安装 openai-whisper
+RUN rm /usr/lib/python3.11/EXTERNALLY-MANAGED && \
+    pip install openai-whisper --break-system-packages --no-cache-dir
+
+# 配置 Go 环境
+RUN go env -w GO111MODULE=on && \
+    go env -w GOBIN=/go/bin \
+
 # 启动程序
 #ENTRYPOINT ["go", "run","/app/main.go"]
 CMD ["bash"]
