@@ -24,10 +24,10 @@ WORKDIR /root
 # 解压 BaiduPCS-Go
 
 RUN ls -al
-RUN 7z x badupcs_amd64.zip
-RUN 7z x badupcs_arm64.zip
-RUN rm badupcs_amd64.zip
-RUN rm badupcs_arm64.zip
+RUN 7z x baidupcs_amd64.zip
+RUN 7z x baidupcs_arm64.zip
+RUN rm baidupcs_amd64.zip
+RUN rm baidupcs_arm64.zip
 
 # 安装 openai-whisper
 
