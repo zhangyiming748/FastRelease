@@ -1,9 +1,11 @@
 FROM golang:1.23.0-bookworm
-# docker run -dit -v /Users/zen/Github/WhisperAndTrans:/data --name test golang:1.22.4-bookworm bash
+
 LABEL authors="zen"
+
 # 更换国内源
+
 COPY sources.list /etc/apt/sources.list.d/debian.sources
-# 更新软件
+
 # 更新软件并安装依赖
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -16,14 +18,14 @@ RUN apt-get update && \
 COPY badupcs_amd64.zip /root
 COPY badupcs_arm64.zip /root
 WORKDIR /root
+
 # 解压 BaiduPCS-Go
+
 RUN ls -al
 RUN 7z x badupcs_amd64.zip
 RUN 7z x badupcs_arm64.zip
 RUN rm badupcs_amd64.zip
 RUN rm badupcs_arm64.zip
-
-RUN apt-get clean
 
 # 安装 openai-whisper
 RUN rm /usr/lib/python3.11/EXTERNALLY-MANAGED && \
@@ -31,6 +33,7 @@ RUN rm /usr/lib/python3.11/EXTERNALLY-MANAGED && \
 
 # 配置 Go 环境
 RUN go env -w GO111MODULE=on && \
+    go env -w GOPROXY=https://goproxy.cn,direct && \
     go env -w GOBIN=/go/bin
 
 # 启动程序
