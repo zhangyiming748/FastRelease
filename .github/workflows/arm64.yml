@@ -34,7 +34,7 @@ jobs:
           ls -ahl
       - name: set BaiduPCS
         run: |
-          wget -O BaiduPCS.zip https://github.com/qjfoidnh/BaiduPCS-Go/releases/download/v3.9.5/BaiduPCS-Go-v3.9.5-linux-amd64.zip
+          wget -O BaiduPCS.zip https://github.com/qjfoidnh/BaiduPCS-Go/releases/download/v3.9.5/BaiduPCS-Go-v3.9.5-linux-arm64.zip
           unzip BaiduPCS.zip
           find . -name "BaiduPCS-Go" -exec mv {} /usr/local/bin \;
       - name : login BaiduPCS
