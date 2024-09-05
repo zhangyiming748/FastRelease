@@ -11,7 +11,7 @@ RUN apt-get update
 RUN apt-get install -y --no-install-recommends \
     python3 python3-pip translate-shell ffmpeg ca-certificates \
     bsdmainutils sqlite3 gawk locales libfribidi-bin dos2unix p7zip-full \
-    wget curl
+    wget curl build-essential
 RUN apt-get clean
 RUN rm -rf /var/lib/apt/lists/*
 
