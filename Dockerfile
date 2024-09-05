@@ -20,7 +20,7 @@ RUN rm -rf /var/lib/apt/lists/*
 COPY baidupcs_amd64.zip /root
 COPY baidupcs_arm64.zip /root
 COPY danmaku2ass/danmaku2ass.py /usr/local/bin
-RUN chmod a+rwx /usr/local/bin/danmaku2ass.py
+RUN chmod a+rwx /usr/local/bin/danmaku2ass
 WORKDIR /root
 
 # 解压 BaiduPCS-Go
