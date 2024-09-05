@@ -19,7 +19,7 @@ RUN rm -rf /var/lib/apt/lists/*
 
 COPY baidupcs_amd64.zip /root
 COPY baidupcs_arm64.zip /root
-COPY danmaku2ass-master/danmaku2ass.py /usr/local/bin
+COPY danmaku2ass/danmaku2ass.py /usr/local/bin
 RUN chmod a+rwx /usr/local/bin/danmaku2ass.py
 WORKDIR /root
 
@@ -28,8 +28,6 @@ WORKDIR /root
 RUN ls -al
 RUN 7z x baidupcs_amd64.zip
 RUN 7z x baidupcs_arm64.zip
-RUN 7z x danmaku2ass.zip
-RUN rm danmaku2ass.zip
 RUN rm baidupcs_amd64.zip
 RUN rm baidupcs_arm64.zip
 

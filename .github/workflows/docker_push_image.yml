@@ -30,7 +30,7 @@ jobs:
           ls -ahlt
       - name: Download danmaku2ass
         run: |
-          wget -O danmaku2ass.zip "https://github.com/m13253/danmaku2ass/archive/refs/heads/master.zip"
+          git clone https://github.com/m13253/danmaku2ass.git
           ls -ahlt
       - name: Extract Docker metadata
         id: meta
