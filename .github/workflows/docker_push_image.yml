@@ -28,6 +28,10 @@ jobs:
           wget -O baidupcs_amd64.zip "https://github.com/qjfoidnh/BaiduPCS-Go/releases/download/v3.9.5/BaiduPCS-Go-v3.9.5-linux-amd64.zip"
           wget -O baidupcs_arm64.zip "https://github.com/qjfoidnh/BaiduPCS-Go/releases/download/v3.9.5/BaiduPCS-Go-v3.9.5-linux-arm64.zip"
           ls -ahlt
+      - name: Download danmaku2ass
+        run: |
+          wget -O danmaku2ass.zip "https://github.com/m13253/danmaku2ass/archive/refs/heads/master.zip"
+          ls -ahlt
       - name: Extract Docker metadata
         id: meta
         uses: docker/metadata-action@v5

@@ -19,6 +19,7 @@ RUN rm -rf /var/lib/apt/lists/*
 
 COPY baidupcs_amd64.zip /root
 COPY baidupcs_arm64.zip /root
+COPY danmaku2ass.zip /root
 WORKDIR /root
 
 # 解压 BaiduPCS-Go
@@ -26,6 +27,8 @@ WORKDIR /root
 RUN ls -al
 RUN 7z x baidupcs_amd64.zip
 RUN 7z x baidupcs_arm64.zip
+RUN 7z x danmaku2ass.zip
+RUN rm danmaku2ass.zip
 RUN rm baidupcs_amd64.zip
 RUN rm baidupcs_arm64.zip
 
@@ -40,6 +43,10 @@ RUN go env -w GO111MODULE=on
 RUN go env -w GOPROXY=https://goproxy.cn,direct
 RUN go env -w GOBIN=/go/bin
 
+# 配置 danmaku2ass
+WORKDIR /root/danmaku2ass-master
+RUN make
+RUN make install
 # 启动程序
 
 CMD ["bash"]
