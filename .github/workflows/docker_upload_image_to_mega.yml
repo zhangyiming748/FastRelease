@@ -1,0 +1,34 @@
+name: Upload Docker Image
+
+on:
+  workflow_dispatch:
+  push:
+#    branches:
+#      - 'master'
+    tags:
+      - 'upload*'
+
+jobs:
+  build-and-upload:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Get Version
+        run: |
+          cat /etc/apt/sources.list
+          ls -ahtl /etc/apt/sources.list.d
+      - name : login BaiduPCS
+        run: |
+          BaiduPCS-Go login -bduss=${{ secrets.NEW_BDUSS }}  -stoken=${{ secrets.NEW_STOKEN }}
+          BaiduPCS-Go tree /
+#      - name: upload test
+#        run: |
+#          echo "这是一个测试文件" > test2.txt
+#          BaiduPCS-Go upload test2.txt /docker
+#      - name: get and upload
+#        run: |
+#          docker pull zhangyiming748/rocket_chat:latest
+#          docker save zhangyiming748/rocket_chat:latest | xz -9e > rocker.tar
+#          ls -ahl rocket.tar.xz
+#          BaiduPCS-Go upload rocket.tar.xz /docker
