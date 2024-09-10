@@ -3,8 +3,8 @@ name: Upload Docker Image To Mega
 on:
   workflow_dispatch:
   push:
-#    branches:
-#      - 'master'
+    #    branches:
+    #      - 'master'
     tags:
       - 'upload*'
 
@@ -18,20 +18,19 @@ jobs:
         run: |
           cat /etc/apt/sources.list
           ls -ahtl /etc/apt/sources.list.d
-      - name : Install Mega
+      - name: Install Mega
         run: |
           wget https://mega.nz/linux/repo/xUbuntu_22.04/amd64/megacmd-xUbuntu_22.04_amd64.deb && sudo apt install "$PWD/megacmd-xUbuntu_22.04_amd64.deb"
-      - name : Login Mega
-        run : |
+      - name: Login Mega
+        run: |
           mega-login ${{ secrets.MEGA_EMAIL }} ${{ secrets.MEGA_PASSWORD }}
           mega-whoami
-#      - name: upload test
-#        run: |
-#          echo "这是一个测试文件" > test2.txt
-#          BaiduPCS-Go upload test2.txt /docker
-#      - name: get and upload
-#        run: |
-#          docker pull zhangyiming748/rocket_chat:latest
-#          docker save zhangyiming748/rocket_chat:latest | xz -9e > rocker.tar
-#          ls -ahl rocket.tar.xz
-#          BaiduPCS-Go upload rocket.tar.xz /docker
+      - name: Docker Pull
+        run: |
+          docker pull zhangyiming748/stand:latest
+      - name: Docker Save
+        run: |
+          docker save zhangyiming748/stand:latest | xz -9e > stand.tar
+      - name: Upload xz
+        run: |
+          mega-put stand.tar.xz /docker/stand.tar.xz
