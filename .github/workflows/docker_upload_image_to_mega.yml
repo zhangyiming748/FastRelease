@@ -1,4 +1,4 @@
-name: Upload Docker Image
+name: Upload Docker Image To Mega
 
 on:
   workflow_dispatch:
@@ -18,10 +18,13 @@ jobs:
         run: |
           cat /etc/apt/sources.list
           ls -ahtl /etc/apt/sources.list.d
-      - name : login BaiduPCS
+      - name : Install Mega
         run: |
-          BaiduPCS-Go login -bduss=${{ secrets.NEW_BDUSS }}  -stoken=${{ secrets.NEW_STOKEN }}
-          BaiduPCS-Go tree /
+          wget https://mega.nz/linux/repo/xUbuntu_22.04/amd64/megacmd-xUbuntu_22.04_amd64.deb && sudo apt install "$PWD/megacmd-xUbuntu_22.04_amd64.deb"
+      - name : Login Mega
+        run : |
+          mega-login ${{ secrets.MEGA_EMAIL }} ${{ secrets.MEGA_PASSWORD }}
+          mega-whoami
 #      - name: upload test
 #        run: |
 #          echo "这是一个测试文件" > test2.txt
