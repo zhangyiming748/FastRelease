@@ -30,7 +30,7 @@ jobs:
           docker pull zhangyiming748/stand:latest
       - name: Docker Save
         run: |
-          docker save zhangyiming748/stand:latest | xz -9e > stand.tar
+          docker save zhangyiming748/stand:latest | xz -9e > stand.tar.xz
       - name: Upload xz
         run: |
           mega-put stand.tar.xz /docker/stand.tar.xz
