@@ -11,7 +11,7 @@ RUN apt-get update
 RUN apt-get install -y --no-install-recommends \
     python3 python3-pip translate-shell ffmpeg ca-certificates \
     bsdmainutils sqlite3 gawk locales libfribidi-bin dos2unix p7zip-full \
-    wget curl build-essential
+    wget curl build-essential mediainfo
 RUN apt-get clean
 RUN rm -rf /var/lib/apt/lists/*
 
@@ -19,7 +19,7 @@ RUN rm -rf /var/lib/apt/lists/*
 
 COPY baidupcs_amd64.zip /root
 COPY baidupcs_arm64.zip /root
-COPY danmaku2ass/danmaku2ass.py /usr/local/bin
+COPY danmaku2ass/danmaku2ass.py /usr/local/bin/danmaku2ass
 RUN chmod a+rwx /usr/local/bin/danmaku2ass
 WORKDIR /root
 
