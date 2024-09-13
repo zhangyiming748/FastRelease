@@ -32,6 +32,9 @@ jobs:
         run: |
           git clone https://github.com/m13253/danmaku2ass.git
           ls -ahlt
+      - name: Download golang
+        run: |
+          wget https://go.dev/dl/go1.23.1.linux-amd64.tar.gz -O go.tar.gz
       - name: Extract Docker metadata
         id: meta
         uses: docker/metadata-action@v5
@@ -41,6 +44,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
+          file: Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
