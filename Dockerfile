@@ -1,9 +1,9 @@
-FROM golang:1.23.1-bookworm
-
+FROM golang:1.23.2-bookworm
+# docker run -it --rm --name go golang:1.23.2-bookworm bash
 LABEL authors="zen"
 
 # 更换国内源
-COPY sources.list /etc/apt/sources.list.d/debian.sources
+COPY debian.sources /etc/apt/sources.list.d/debian.sources
 
 # 更新软件并安装依赖
 RUN apt-get update && \
@@ -36,6 +36,12 @@ RUN rm /usr/lib/python3.11/EXTERNALLY-MANAGED && \
 RUN go env -w GO111MODULE=on && \
     go env -w GOPROXY=https://goproxy.cn,direct && \
     go env -w GOBIN=/go/bin
+
+# 天朝特色
+RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list.d/debian.sources
+RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list.d/debian.sources
+RUN pip install -i https://mirrors.ustc.edu.cn/pypi/simple pip -U
+RUN pip config set global.index-url https://mirrors.ustc.edu.cn/pypi/simple
 
 # 启动程序
 CMD ["bash"]

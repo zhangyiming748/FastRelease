@@ -1,11 +1,11 @@
-Types: deb
+Types: deb deb-src
 # http://snapshot.debian.org/archive/debian/20240701T000000Z
 URIs: http://deb.debian.org/debian
 Suites: bookworm bookworm-updates bookworm-backports
 Components: main contrib non-free non-free-firmware 
 Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
 
-Types: deb
+Types: deb deb-src
 # http://snapshot.debian.org/archive/debian-security/20240701T000000Z
 URIs: http://deb.debian.org/debian-security
 Suites: bookworm-security
