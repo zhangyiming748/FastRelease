@@ -1,8 +1,11 @@
 FROM golang:1.23.2-bookworm
-# docker run -it --rm --name go golang:1.23.2-bookworm bash
+
 LABEL authors="zen"
 
-# 更换国内源
+# 设置非交互模式
+ENV DEBIAN_FRONTEND=noninteractive
+
+# 更换完整源
 COPY debian.sources /etc/apt/sources.list.d/debian.sources
 
 # 更新软件并安装依赖
@@ -43,5 +46,14 @@ RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list.d/debi
 RUN pip install -i https://mirrors.ustc.edu.cn/pypi/simple pip -U
 RUN pip config set global.index-url https://mirrors.ustc.edu.cn/pypi/simple
 
+# 中文支持
+RUN apt update && \
+    apt install -y locales && \
+    echo "zh_CN.UTF-8 UTF-8" >> /etc/locale.gen && \
+    locale-gen zh_CN.UTF-8 && \
+    update-locale LANG=zh_CN.UTF-8
+ENV LANG=zh_CN.UTF-8
+ENV LANGUAGE=zh_CN:zh
+ENV LC_ALL=zh_CN.UTF-8
 # 启动程序
 CMD ["bash"]
