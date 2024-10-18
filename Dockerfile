@@ -33,7 +33,7 @@ RUN 7z x baidupcs_amd64.zip && \
 
 # 安装 openai-whisper
 RUN rm /usr/lib/python3.11/EXTERNALLY-MANAGED && \
-    pip install openai-whisper yt-dlp --break-system-packages --no-cache-dir
+    pip install --no-cache-dir openai-whisper yt-dlp
 
 # 配置 Go 环境
 RUN go env -w GO111MODULE=on && \
@@ -41,19 +41,21 @@ RUN go env -w GO111MODULE=on && \
     go env -w GOBIN=/go/bin
 
 # 天朝特色
-RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list.d/debian.sources
-RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list.d/debian.sources
-RUN pip install -i https://mirrors.ustc.edu.cn/pypi/simple pip -U
-RUN pip config set global.index-url https://mirrors.ustc.edu.cn/pypi/simple
+RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list.d/debian.sources && \
+    pip install -i https://mirrors.ustc.edu.cn/pypi/simple pip -U && \
+    pip config set global.index-url https://mirrors.ustc.edu.cn/pypi/simple
 
 # 中文支持
-RUN apt update && \
-    apt install -y locales && \
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends locales && \
     echo "zh_CN.UTF-8 UTF-8" >> /etc/locale.gen && \
     locale-gen zh_CN.UTF-8 && \
     update-locale LANG=zh_CN.UTF-8
-ENV LANG=zh_CN.UTF-8
-ENV LANGUAGE=zh_CN:zh
-ENV LC_ALL=zh_CN.UTF-8
+
+# 设置环境变量
+ENV LANG=zh_CN.UTF-8 \
+    LANGUAGE=zh_CN:zh \
+    LC_ALL=zh_CN.UTF-8
+
 # 启动程序
 CMD ["bash"]
