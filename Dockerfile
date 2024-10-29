@@ -58,11 +58,14 @@ ENV LANG=zh_CN.UTF-8 \
     LC_ALL=zh_CN.UTF-8
 
 # 设置 root 密码
-RUN echo "root:your_password" | chpasswd
+RUN echo "root:123456" | chpasswd
 
 # 允许 root 登录 SSH
 RUN echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config && \
     echo 'PasswordAuthentication yes' >> /etc/ssh/sshd_config
+
+# 设置其他环境变量
+ENV PATH="$PATH:/usr/local/go/bin"
 
 # 启动 SSH 服务
 WORKDIR /
