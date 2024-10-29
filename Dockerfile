@@ -13,7 +13,7 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     python3 python3-pip translate-shell ffmpeg ca-certificates \
     bsdmainutils sqlite3 gawk locales libfribidi-bin dos2unix p7zip-full \
-    wget curl build-essential mediainfo && \
+    wget curl build-essential mediainfo openssh-server && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -56,6 +56,14 @@ RUN apt-get update && \
 ENV LANG=zh_CN.UTF-8 \
     LANGUAGE=zh_CN:zh \
     LC_ALL=zh_CN.UTF-8
+WORKDIR /
+# 设置 root 密码
+
+RUN echo "root:your_password" | chpasswd
+
+# 允许root登录ssh
+RUN echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config
+RUN echo 'PasswordAuthentication yes' >> /etc/ssh/sshd_config
 
 # 启动程序
-CMD ["bash"]
+ENTRYPOINT ["service" ,"ssh" ,"start","-D"]
