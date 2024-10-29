@@ -8,13 +8,13 @@ ENV DEBIAN_FRONTEND=noninteractive
 # 更换完整源
 COPY debian.sources /etc/apt/sources.list.d/debian.sources
 
-# 更新软件并安装依赖
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
+# 更新软件包并安装依赖
+RUN apt update && \
+    apt install -y --no-install-recommends \
     python3 python3-pip translate-shell ffmpeg ca-certificates \
     bsdmainutils sqlite3 gawk locales libfribidi-bin dos2unix p7zip-full \
     wget curl build-essential mediainfo openssh-server && \
-    apt-get clean && \
+    apt clean && \
     rm -rf /var/lib/apt/lists/*
 
 # 复制文件
@@ -31,7 +31,7 @@ RUN 7z x baidupcs_amd64.zip && \
     7z x baidupcs_arm64.zip && \
     rm baidupcs_amd64.zip baidupcs_arm64.zip
 
-# 安装 openai-whisper
+# 安装 openai-whisper 和 yt-dlp
 RUN rm /usr/lib/python3.11/EXTERNALLY-MANAGED && \
     pip install --no-cache-dir openai-whisper yt-dlp
 
@@ -40,30 +40,30 @@ RUN go env -w GO111MODULE=on && \
     go env -w GOPROXY=https://goproxy.cn,direct && \
     go env -w GOBIN=/go/bin
 
-# 天朝特色
-RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list.d/debian.sources && \
-    pip install -i https://mirrors.ustc.edu.cn/pypi/simple pip -U && \
-    pip config set global.index-url https://mirrors.ustc.edu.cn/pypi/simple
-
 # 中文支持
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends locales && \
+RUN apt update && \
+    apt install -y --no-install-recommends locales && \
     echo "zh_CN.UTF-8 UTF-8" >> /etc/locale.gen && \
     locale-gen zh_CN.UTF-8 && \
     update-locale LANG=zh_CN.UTF-8
+
+# 天朝特色：更换源
+RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list.d/debian.sources && \
+    pip install -i https://mirrors.ustc.edu.cn/pypi/simple pip -U && \
+    pip config set global.index-url https://mirrors.ustc.edu.cn/pypi/simple
 
 # 设置环境变量
 ENV LANG=zh_CN.UTF-8 \
     LANGUAGE=zh_CN:zh \
     LC_ALL=zh_CN.UTF-8
-WORKDIR /
-# 设置 root 密码
 
+# 设置 root 密码
 RUN echo "root:your_password" | chpasswd
 
-# 允许root登录ssh
-RUN echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config
-RUN echo 'PasswordAuthentication yes' >> /etc/ssh/sshd_config
+# 允许 root 登录 SSH
+RUN echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config && \
+    echo 'PasswordAuthentication yes' >> /etc/ssh/sshd_config
 
-# 启动程序
-ENTRYPOINT ["service" ,"ssh" ,"start","-D"]
+# 启动 SSH 服务
+WORKDIR /
+ENTRYPOINT ["service", "ssh", "start", "-D"]
