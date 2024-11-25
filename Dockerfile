@@ -18,8 +18,8 @@ RUN apt update && \
     rm -rf /var/lib/apt/lists/*
 
 # 复制文件
-COPY baidupcs_amd64.zip /root/
-COPY baidupcs_arm64.zip /root/
+# COPY baidupcs_amd64.zip /root/
+# COPY baidupcs_arm64.zip /root/
 COPY danmaku2ass/danmaku2ass.py /usr/local/bin/danmaku2ass
 
 # 设置权限
