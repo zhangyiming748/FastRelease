@@ -36,11 +36,11 @@ RUN go env -w GO111MODULE=on && \
 
 # 安装gvm
 WORKDIR /root
-RUN wget https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer \
-    && bash /root/gvm-installer \
-    && source /root/.gvm/scripts/gvm \
-    && gvm install go1.18 \
-    && gvm use go1.18
+RUN wget https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer 
+RUN bash /root/gvm-installer 
+RUN source /root/.gvm/scripts/gvm 
+RUN gvm install go1.18 
+RUN gvm use go1.18
     
 # 复制BaiduPCS仓库
 COPY BaiduPCS /root/BaiduPCS
