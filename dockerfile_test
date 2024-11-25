@@ -11,10 +11,11 @@ COPY debian.sources /etc/apt/sources.list.d/debian.sources
 
 # 安装gvm相关依赖
 RUN apt update && \
-    apt install -y curl git mercurial make binutils bison gcc build-essential
+    apt install -y wget curl git mercurial make binutils bison gcc build-essential
 
 # 安装gvm
-RUN bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
+RUN wget https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer
+RUN bash gvm-installer
 
 # 使gvm生效
 RUN source /root/.gvm/scripts/gvm
