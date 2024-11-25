@@ -35,6 +35,7 @@ RUN go env -w GO111MODULE=on && \
     go env -w GOBIN=/go/bin
 
 # 安装gvm
+WORKDIR /root
 RUN wget https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer \
     && bash /root/gvm-installer \
     && source /root/.gvm/scripts/gvm \
