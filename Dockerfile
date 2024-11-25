@@ -1,5 +1,5 @@
-FROM golang:1.23.2-bookworm
-
+FROM golang:1.23.3-bookworm
+#docker run -dit --name gvm -v /Users/zen/github/FastRelease:/data golang:1.23.3-bookworm bash
 LABEL authors="zen"
 
 # 设置非交互模式
@@ -13,7 +13,7 @@ RUN apt update && \
     apt install -y --no-install-recommends \
     python3 python3-pip translate-shell ffmpeg ca-certificates \
     bsdmainutils sqlite3 gawk locales libfribidi-bin dos2unix p7zip-full \
-    wget curl build-essential mediainfo openssh-server nano axel aria2 htop btop bash-completion && \
+    wget curl build-essential mediainfo openssh-server nano file axel aria2 htop btop bash-completion bison && \
     apt clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -35,19 +35,19 @@ RUN go env -w GO111MODULE=on && \
     go env -w GOBIN=/go/bin
 
 # 安装gvm
-ENV GVM_ROOT='/usr/local/gvm'
-RUN curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer | bash \
-    && export PATH=$PATH:$GVM_ROOT/scripts/gvm \
+RUN wget https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer \
+    && bash /root/gvm-installer \
+    && source /root/.gvm/scripts/gvm \
     && gvm install go1.18 \
     && gvm use go1.18
     
 # 复制BaiduPCS仓库
 COPY BaiduPCS /root/BaiduPCS
 WORKDIR /root/BaiduPCS
-RUN source $GVM_ROOT/scripts/gvm \
+RUN source /root/.gvm/scripts/gvm \
     && gvm use go1.18 \
     && go build -o /usr/local/bin/BaiduPCS main.go
-RUN source $GVM_ROOT/scripts/gvm \
+RUN source /root/.gvm/scripts/gvm \
     && gvm use go1.23.3
     
 # 中文支持
