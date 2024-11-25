@@ -37,7 +37,7 @@ RUN go env -w GO111MODULE=on && \
 # 安装gvm
 RUN bash -c " \
     export GVM_ROOT='/usr/local/gvm'; \
-    \curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer | bash; \
+    curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer | bash; \
     source $GVM_ROOT/scripts/gvm; \
     gvm install go1.18; \
     gvm use go1.18; \
