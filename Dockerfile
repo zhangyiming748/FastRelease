@@ -35,13 +35,12 @@ RUN go env -w GO111MODULE=on && \
     go env -w GOBIN=/go/bin
 
 # 安装gvm
-RUN bash -c " \
-    export GVM_ROOT='/usr/local/gvm'; \
-    curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer | bash; \
-    source $GVM_ROOT/scripts/gvm; \
-    gvm install go1.18; \
-    gvm use go1.18; \
-    "
+ENV GVM_ROOT='/usr/local/gvm'
+RUN curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer | bash \
+    && export PATH=$PATH:$GVM_ROOT/scripts/gvm \
+    && gvm install go1.18 \
+    && gvm use go1.18
+    
 # 复制BaiduPCS仓库
 COPY BaiduPCS /root/BaiduPCS
 WORKDIR /root/BaiduPCS
