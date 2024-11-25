@@ -3,7 +3,7 @@ name: Publish Docker Image
 on:
   push:
     tags:
-      - 'v*'
+      - 't*'
 
 jobs:
   build-and-push:
@@ -44,8 +44,8 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: dockerfile
-          push: true
+          file: dockerfile_test
+          push: false
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           platforms: |

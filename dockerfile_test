@@ -1,0 +1,33 @@
+# 使用bookworm作为基础镜像
+FROM debian:bookworm
+LABEL authors="zen"
+
+# 设置非交互模式
+ENV DEBIAN_FRONTEND=noninteractive
+
+# 更换完整源
+COPY debian.sources /etc/apt/sources.list.d/debian.sources
+#RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list.d/debian.sources 
+
+# 安装gvm相关依赖
+RUN apt update && \
+    apt install -y curl git mercurial make binutils bison gcc build-essential
+
+# 安装gvm
+RUN bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
+
+# 使gvm生效
+RUN source /root/.gvm/scripts/gvm
+
+# 使用gvm安装Go1.18版本并设置为默认版本
+RUN gvm install go1.18 && \
+    gvm use go1.18 --default
+
+# 设置工作目录（这里假设Go程序将放在/app目录下进行编译和后续运行等操作，可按需修改）
+WORKDIR /app
+
+# 将本地当前目录（假设Go程序代码在此目录下）下的所有文件复制到镜像内的/app目录
+COPY . /app
+
+# 编译Go程序（假设主包的main.go就在/app目录下，如果结构不同需相应调整命令）
+RUN go build -o myapp
