@@ -18,7 +18,11 @@ RUN wget https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-ins
 RUN bash gvm-installer
 
 # 使gvm生效
-RUN . /root/.gvm/scripts/gvm
+# 设置默认的shell为bash
+
+SHELL ["/bin/bash", "-c"]
+
+RUN source /root/.gvm/scripts/gvm
 
 # 使用gvm安装Go1.18版本并设置为默认版本
 RUN gvm install go1.18 && \
