@@ -1,5 +1,5 @@
 # 使用bookworm作为基础镜像
-FROM debian:bookworm
+FROM golang:1.23.3-bookworm
 LABEL authors="zen"
 
 # 设置非交互模式
