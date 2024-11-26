@@ -25,7 +25,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Download BaiduPcs
         run: |
-          https://github.com/qjfoidnh/BaiduPCS-Go.git BaiduPCS-Go
+          git clone https://github.com/qjfoidnh/BaiduPCS-Go.git BaiduPCS-Go
       - name: Download danmaku2ass
         run: |
           git clone https://github.com/m13253/danmaku2ass.git
