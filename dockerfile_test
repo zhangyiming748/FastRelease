@@ -52,8 +52,6 @@ RUN apt update && \
     apt clean && \
     rm -rf /var/lib/apt/lists/*
 
-# 设置权限
-RUN chmod a+rwx /usr/local/bin/danmaku2ass
 
 # 安装 openai-whisper 和 yt-dlp
 RUN rm /usr/lib/python3.11/EXTERNALLY-MANAGED && \
