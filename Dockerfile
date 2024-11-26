@@ -1,3 +1,32 @@
+# 第一阶段：使用 Golang 1.18 编译文件
+#docker run -dit --name baidu -v C:\Users\zen\Github\FastRelease:/data golang:1.18.10-bullseye bash
+FROM golang:1.18.10-bullseye AS builder
+LABEL authors="zen"
+
+# 设置非交互模式
+ENV DEBIAN_FRONTEND=noninteractive
+
+# 更换完整源
+#COPY debian.sources /etc/apt/sources.list.d/debian.sources
+#RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list.d/debian.sources
+ENV PATH=$PATH:/go/bin
+RUN apt update
+RUN apt install zip build-essential -y
+RUN go env -w GOBIN=/go/bin
+# RUN go install github.com/josephspurrier/goversioninfo@latest
+
+# 设置工作目录（这里假设Go程序将放在/app目录下进行编译和后续运行等操作，可按需修改）
+WORKDIR /app
+
+COPY BaiduPCS-Go /app/BaiduPCS-Go
+
+WORKDIR /app/BaiduPCS-Go
+RUN ls
+RUN go vet
+RUN go mod tidy
+RUN go mod vendor
+RUN go build -o BaiduPCS main.go
+
 FROM golang:1.23.3-bookworm
 
 LABEL authors="zen"
@@ -18,18 +47,13 @@ RUN apt update && \
     rm -rf /var/lib/apt/lists/*
 
 # 复制文件
-COPY baidupcs_amd64.zip /root/
-COPY baidupcs_arm64.zip /root/
 COPY danmaku2ass/danmaku2ass.py /usr/local/bin/danmaku2ass
+
+# 从第一阶段复制编译好的二进制文件到最终镜像中
+COPY --from=builder /app/BaiduPCS-Go/BaiduPCS /usr/local/bin/BaiduPCS
 
 # 设置权限
 RUN chmod a+rwx /usr/local/bin/danmaku2ass
-
-# 解压 BaiduPCS-Go
-WORKDIR /root
-RUN 7z x baidupcs_amd64.zip && \
-    7z x baidupcs_arm64.zip && \
-    rm baidupcs_amd64.zip baidupcs_arm64.zip
 
 # 安装 openai-whisper 和 yt-dlp
 RUN rm /usr/lib/python3.11/EXTERNALLY-MANAGED && \

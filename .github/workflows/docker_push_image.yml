@@ -12,9 +12,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-#      - name: Set up QEMU
-#        uses: docker/setup-qemu-action@v3
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -25,16 +22,11 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Download BaiduPcs
         run: |
-          wget -O baidupcs_amd64.zip "https://github.com/qjfoidnh/BaiduPCS-Go/releases/download/v3.9.5/BaiduPCS-Go-v3.9.5-linux-amd64.zip"
-          wget -O baidupcs_arm64.zip "https://github.com/qjfoidnh/BaiduPCS-Go/releases/download/v3.9.5/BaiduPCS-Go-v3.9.5-linux-arm64.zip"
-          ls -ahlt
+          git clone https://github.com/qjfoidnh/BaiduPCS-Go.git BaiduPCS-Go
       - name: Download danmaku2ass
         run: |
           git clone https://github.com/m13253/danmaku2ass.git
           ls -ahlt
-      - name: Download golang
-        run: |
-          wget https://go.dev/dl/go1.23.1.linux-amd64.tar.gz -O go.tar.gz
       - name: Extract Docker metadata
         id: meta
         uses: docker/metadata-action@v5
