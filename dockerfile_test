@@ -10,6 +10,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 #COPY debian.sources /etc/apt/sources.list.d/debian.sources
 #RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list.d/debian.sources
 ENV PATH=$PATH:/go/bin
+RUN apt update
 RUN apt install zip build-essential -y
 RUN go env -w GOBIN=/go/bin
 RUN go install github.com/josephspurrier/goversioninfo
