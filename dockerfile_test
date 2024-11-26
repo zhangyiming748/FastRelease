@@ -18,9 +18,10 @@ RUN go env -w GOBIN=/go/bin
 # 设置工作目录（这里假设Go程序将放在/app目录下进行编译和后续运行等操作，可按需修改）
 WORKDIR /app
 
-COPY BaiduPCS-Go .
+COPY BaiduPCS-Go /app/BaiduPCS-Go
 
 WORKDIR /app/BaiduPCS-Go
+RUN ls
 RUN go vet
 RUN go mod tidy
 RUN go mod vendor
