@@ -38,7 +38,8 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: zhangyiming748/stand
-          
+# 容器名不允许
+#          images: zhangyiming748/${{ github.repository }}
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
