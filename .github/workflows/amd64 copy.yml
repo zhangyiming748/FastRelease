@@ -1,0 +1,46 @@
+name: x86-64 Pull and Save Docker Image
+on:
+  workflow_dispatch:
+    inputs:
+      docker_images:
+        description: '请填写docker镜像名称'
+        required: true
+        default: 'alpine:latest'  # 设置默认的 Docker 镜像列表
+
+jobs:
+  pull_and_upload:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        incloud:
+          - architecture: amd64
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Pull Docker Images
+        run: |
+          docker pull ${{ github.event.inputs.docker_images }}
+
+      - name: Compress the TAR files
+        run: |
+          docker_images=${{ github.event.inputs.docker_images }}
+          new_variable="${docker_images//:/_}"
+          echo "$new_variable"
+          docker save ${{ github.event.inputs.docker_images }} | xz -9ek --memlimit-compress=32G > "$new_variable".tar.xz
+      - name: check xz
+        run: |
+          ls -ahl
+      - name: set BaiduPCS
+        run: |
+          wget -O BaiduPCS.zip https://github.com/qjfoidnh/BaiduPCS-Go/releases/download/v3.9.5/BaiduPCS-Go-v3.9.5-linux-amd64.zip
+          unzip BaiduPCS.zip
+          find . -name "BaiduPCS-Go" -exec mv {} /usr/local/bin \;
+      - name : login BaiduPCS
+        run: |
+          BaiduPCS-Go login -bduss=${{ secrets.NEW_BDUSS }}  -stoken=${{ secrets.NEW_STOKEN }}
+          BaiduPCS-Go tree /
+      - name: upload baidupcs
+        run: |
+          BaiduPCS-Go upload *.xz /docker/amd64
