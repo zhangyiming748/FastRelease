@@ -14,10 +14,12 @@ jobs:
         uses: actions/checkout@v4
       - name: Install aria2c
         run: |
-          sudo apt install aria2 -y
+          sudo apt install aria2 tree -y
       - name: Download
         run: |
           aria2c 'magnet:?xt=urn:btih:b84e74c1dbcc88a02c5b24a6f84383f353a2e1dd&dn=zh-cn_windows_11_enterprise_ltsc_2024_x64_dvd_cff9cd2d.iso&xl=5287520256'
+      - name: check
+        run : tree
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
