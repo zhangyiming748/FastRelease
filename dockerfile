@@ -1,39 +1,21 @@
-# 第一阶段：使用 Golang 1.18 编译文件
-#docker run -dit --name baidu -v C:\Users\zen\Github\FastRelease:/data golang:1.18.10-bullseye bash
-FROM golang:1.18.10-bullseye AS builder
+# 第一阶段：使用 Golang 编译 BaiduPcs
+FROM golang:latest AS builder
 LABEL authors="zen"
 
 # 设置非交互模式
 ENV DEBIAN_FRONTEND=noninteractive
 
-# 更换完整源
-#COPY debian.sources /etc/apt/sources.list.d/debian.sources
-#RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list.d/debian.sources
-ENV PATH=$PATH:/go/bin
-RUN apt update
-RUN apt install zip build-essential -y
-RUN go env -w GOBIN=/go/bin
-# RUN go install github.com/josephspurrier/goversioninfo@latest
+COPY BaiduPCS-Go /BaiduPCS-Go
 
-# 设置工作目录（这里假设Go程序将放在/app目录下进行编译和后续运行等操作，可按需修改）
-WORKDIR /app
+WORKDIR /BaiduPCS-Go
 
-COPY BaiduPCS-Go /app/BaiduPCS-Go
-
-WORKDIR /app/BaiduPCS-Go
 RUN ls
 RUN go vet
 RUN go mod tidy
 RUN go mod vendor
 RUN go build -o BaiduPCS main.go
 
-
-
-# 第二阶段：使用 Golang 1.23.3 创建最终镜像
-FROM golang:1.23.3-bookworm
-
-# 从第一阶段复制编译好的二进制文件到最终镜像中
-COPY --from=builder /app/BaiduPCS-Go/BaiduPCS /usr/local/bin/BaiduPCS
+FROM golang:latest
 
 LABEL authors="zen"
 
@@ -51,6 +33,10 @@ RUN apt update && \
     wget curl build-essential mediainfo openssh-server nano axel aria2 htop btop && \
     apt clean && \
     rm -rf /var/lib/apt/lists/*
+
+# 从第一阶段复制编译好的二进制文件到最终镜像中
+COPY --from=builder /BaiduPCS-Go/BaiduPCS /usr/local/bin/BaiduPCS
+
 
 
 # 安装 openai-whisper 和 yt-dlp
