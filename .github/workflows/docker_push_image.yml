@@ -23,6 +23,9 @@ jobs:
       - name: Download BaiduPcs
         run: |
           git clone https://github.com/qjfoidnh/BaiduPCS-Go.git BaiduPCS-Go
+      - name: Download tdl
+        run: |
+          git clone https://github.com/iyear/tdl.git tdl-go
       - name: Extract Docker metadata
         id: meta
         uses: docker/metadata-action@v5

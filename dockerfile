@@ -1,5 +1,5 @@
 # 第一阶段：使用 Golang 编译 BaiduPcs
-FROM golang:latest AS builder
+FROM golang:latest AS builder1
 LABEL authors="zen"
 
 # 设置非交互模式
@@ -11,8 +11,18 @@ WORKDIR /BaiduPCS-Go
 # 合并检查、更新依赖和构建操作
 RUN ls && go vet && go mod tidy && go mod vendor && go build -o BaiduPCS main.go
 
+# 第二阶段：使用 Golang 编译 tdl
+FROM golang:latest AS builder2
+LABEL authors="zen"
+# 设置非交互模式
+ENV DEBIAN_FRONTEND=noninteractive
 
-# 第二阶段：构建最终镜像
+COPY tdl-go /tdl-go
+WORKDIR /tdl-go
+# 合并检查、更新依赖和构建操作
+RUN ls && go vet && go mod tidy && go mod vendor && go build -o tdl main.go
+
+# 第三阶段：构建最终镜像
 FROM golang:latest
 LABEL authors="zen"
 
@@ -31,8 +41,10 @@ RUN apt update && \
     wget curl build-essential mediainfo openssh-server nano axel aria2 htop btop
 
 # 从第一阶段复制编译好的二进制文件到最终镜像中
-COPY --from=builder /BaiduPCS-Go/BaiduPCS /usr/local/bin/BaiduPCS
+COPY --from=builder1 /BaiduPCS-Go/BaiduPCS /usr/local/bin/BaiduPCS
 
+# 从第二阶段复制编译好的二进制文件到最终镜像中
+COPY --from=builder2 /tdl-go/tdl /usr/local/bin/tdl
 
 # 安装 openai-whisper 和 yt-dlp
 RUN rm /usr/lib/python3.11/EXTERNALLY-MANAGED || true && \
@@ -51,7 +63,6 @@ RUN apt update && \
     echo "zh_CN.UTF-8 UTF-8" >> /etc/locale.gen && \
     locale-gen zh_CN.UTF-8 && \
     update-locale LANG=zh_CN.UTF-8 && \
-    # 清理 apt 缓存和临时文件
     apt clean && \
     rm -rf /var/lib/apt/lists/*
 
