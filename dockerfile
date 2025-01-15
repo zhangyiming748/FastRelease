@@ -27,6 +27,7 @@ COPY debian.sources /etc/apt/sources.list.d/debian.sources
 
 # 更新软件包并安装依赖
 RUN apt update && \
+    apt full-upgrade \
     apt install -y --no-install-recommends \
     python3 python3-pip translate-shell ffmpeg ca-certificates \
     bsdmainutils sqlite3 gawk locales libfribidi-bin dos2unix p7zip-full \
@@ -36,7 +37,6 @@ RUN apt update && \
 
 # 从第一阶段复制编译好的二进制文件到最终镜像中
 COPY --from=builder /BaiduPCS-Go/BaiduPCS /usr/local/bin/BaiduPCS
-
 
 
 # 安装 openai-whisper 和 yt-dlp
