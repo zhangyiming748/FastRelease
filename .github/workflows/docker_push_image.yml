@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-and-push:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -23,10 +23,9 @@ jobs:
       - name: Download BaiduPcs
         run: |
           git clone https://github.com/qjfoidnh/BaiduPCS-Go.git BaiduPCS-Go
-      - name: Download danmaku2ass
+      - name: Download tdl
         run: |
-          git clone https://github.com/m13253/danmaku2ass.git
-          ls -ahlt
+          git clone https://github.com/iyear/tdl.git tdl-go
       - name: Extract Docker metadata
         id: meta
         uses: docker/metadata-action@v5
@@ -36,7 +35,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: dockerfile_release
+          file: dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

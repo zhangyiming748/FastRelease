@@ -1,6 +1,6 @@
 # 第一阶段：使用 Golang 1.18 编译文件
 #docker run -dit --name baidu -v C:\Users\zen\Github\FastRelease:/data golang:1.18.10-bullseye bash
-FROM golang:1.23.6-bullseye AS builder
+FROM golang:1.18.10-bullseye AS builder
 LABEL authors="zen"
 
 # 设置非交互模式
@@ -27,7 +27,7 @@ RUN go mod tidy
 RUN go mod vendor
 RUN go build -o BaiduPCS main.go
 
-FROM golang:1.23.6-bookworm
+FROM golang:1.23.3-bookworm
 
 LABEL authors="zen"
 
@@ -90,7 +90,7 @@ RUN echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config && \
 
 # 设置其他环境变量
 ENV PATH="$PATH:/usr/local/go/bin"
-EXPOSE 22
+
 # 启动 SSH 服务
 WORKDIR /
 ENTRYPOINT ["service", "ssh", "start", "-D"]
