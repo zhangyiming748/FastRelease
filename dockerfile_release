@@ -1,6 +1,6 @@
 # 第一阶段：使用 Golang 1.18 编译文件
 #docker run -dit --name baidu -v C:\Users\zen\Github\FastRelease:/data golang:1.18.10-bullseye bash
-FROM golang:1.24.0-bookworm AS builder
+FROM golang:latest AS builder
 LABEL authors="zen"
 
 # 设置非交互模式
