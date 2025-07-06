@@ -20,7 +20,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 COPY tdl-go /tdl-go
 WORKDIR /tdl-go
 # 合并检查、更新依赖和构建操作
-RUN ls && go vet && go mod tidy && go mod vendor && go build -o tdl main.go
+RUN ls && go vet && go mod tidy  && go build -o tdl main.go
 
 # 第三阶段：构建最终镜像
 FROM golang:latest
