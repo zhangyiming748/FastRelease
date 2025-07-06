@@ -38,7 +38,8 @@ RUN apt update && \
     apt install -y --no-install-recommends \
     python3 python3-pip translate-shell ffmpeg ca-certificates \
     bsdmainutils sqlite3 gawk locales libfribidi-bin dos2unix p7zip-full \
-    wget curl build-essential mediainfo openssh-server nano axel aria2 htop btop
+    wget curl build-essential mediainfo openssh-server nano axel aria2 htop btop \
+    fonts-wqy-microhei fonts-wqy-zenhei fonts-noto-cjk
 
 # 从第一阶段复制编译好的二进制文件到最终镜像中
 COPY --from=builder1 /BaiduPCS-Go/BaiduPCS /usr/local/bin/BaiduPCS
@@ -91,6 +92,8 @@ RUN echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config && \
 # 设置其他环境变量
 ENV PATH="$PATH:/usr/local/go/bin"
 
+# 重新构建apt缓存
+RUN apt update 
 
 # 启动 SSH 服务
 WORKDIR /
