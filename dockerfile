@@ -1,4 +1,4 @@
-# 第一阶段：使用 Golang 编译 BaiduPcs
+# 第一阶段：使用 Golang 编译 BaiduPCS
 FROM golang:latest AS builder1
 LABEL authors="zen"
 
@@ -33,18 +33,37 @@ ENV DEBIAN_FRONTEND=noninteractive
 COPY debian.sources /etc/apt/sources.list.d/debian.sources
 
 # 更新软件包、安装依赖并清理无用文件
-RUN apt update && \
-    apt full-upgrade -y && \
-    apt install -y --no-install-recommends \
-    python3 python3-pip translate-shell ffmpeg ca-certificates \
-    bsdmainutils sqlite3 gawk locales libfribidi-bin dos2unix p7zip-full \
-    wget curl build-essential mediainfo openssh-server nano axel aria2 htop btop \
-    fonts-wqy-microhei fonts-wqy-zenhei fonts-noto-cjk
+RUN apt update 
+RUN apt full-upgrade -y
+RUN apt install -y --no-install-recommends python3 python3-pip
+RUN apt install -y --no-install-recommends translate-shell
+RUN apt install -y --no-install-recommends ffmpeg
+RUN apt install -y --no-install-recommends ca-certificates
+RUN apt install -y --no-install-recommends bsdmainutils
+RUN apt install -y --no-install-recommends sqlite3
+RUN apt install -y --no-install-recommends gawk
+RUN apt install -y --no-install-recommends locales
+RUN apt install -y --no-install-recommends libfribidi-bin
+RUN apt install -y --no-install-recommends dos2unix
+RUN apt install -y --no-install-recommends p7zip-full
+RUN apt install -y --no-install-recommends wget
+RUN apt install -y --no-install-recommends curl
+RUN apt install -y --no-install-recommends build-essential
+RUN apt install -y --no-install-recommends mediainfo
+RUN apt install -y --no-install-recommends openssh-server
+RUN apt install -y --no-install-recommends nano
+RUN apt install -y --no-install-recommends axel
+RUN apt install -y --no-install-recommends aria2
+RUN apt install -y --no-install-recommends htop
+RUN apt install -y --no-install-recommends btop
+RUN apt install -y --no-install-recommends fonts-wqy-microhei
+RUN apt install -y --no-install-recommends fonts-wqy-zenhei
+RUN apt install -y --no-install-recommends fonts-noto-cjk
 
-# 从第一阶段复制编译好的二进制文件到最终镜像中
+# 从第一阶段复制编译好的二进制文件到最终图像中
 COPY --from=builder1 /BaiduPCS-Go/BaiduPCS /usr/local/bin/BaiduPCS
 
-# 从第二阶段复制编译好的二进制文件到最终镜像中
+# 从第二阶段复制编译好的二进制文件到最终图像中
 COPY --from=builder2 /tdl-go/tdl /usr/local/bin/tdl
 
 # 安装 openai-whisper 和 yt-dlp
