@@ -35,7 +35,7 @@ COPY debian.sources /etc/apt/sources.list.d/debian.sources
 # 更新软件包、安装依赖并清理无用文件
 RUN apt update 
 RUN apt full-upgrade -y
-RUN apt install -y --no-install-recommends python3 python3-pip
+RUN apt install -y --no-install-recommends python3 python3-pip python3-distutils
 RUN apt install -y --no-install-recommends translate-shell
 RUN apt install -y --no-install-recommends ffmpeg
 RUN apt install -y --no-install-recommends ca-certificates
