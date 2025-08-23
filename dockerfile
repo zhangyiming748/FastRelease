@@ -1,5 +1,5 @@
 # 第一阶段：使用 Golang 编译 BaiduPCS
-FROM golang:latest AS builder1
+FROM golang:1.25.0-bookworm AS builder1
 LABEL authors="zen"
 
 # 设置非交互模式
@@ -12,7 +12,7 @@ WORKDIR /BaiduPCS-Go
 RUN ls && go vet && go mod tidy && go mod vendor && go build -o BaiduPCS main.go
 
 # 第二阶段：使用 Golang 编译 tdl
-FROM golang:latest AS builder2
+FROM golang:1.25.0-bookworm AS builder2
 LABEL authors="zen"
 # 设置非交互模式
 ENV DEBIAN_FRONTEND=noninteractive
@@ -23,7 +23,7 @@ WORKDIR /tdl-go
 RUN ls && go vet && go mod tidy  && go build -o tdl main.go
 
 # 第三阶段：构建最终镜像
-FROM golang:latest
+FROM golang:1.25.0-bookworm
 LABEL authors="zen"
 
 # 设置非交互模式
