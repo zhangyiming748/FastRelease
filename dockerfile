@@ -90,9 +90,9 @@ RUN apt update && \
 
 
 # 天朝特色：更换源
-RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list.d/debian.sources && \
-    pip install --break-system-packages -i https://mirrors.ustc.edu.cn/pypi/simple pip -U && \
-    pip config set global.index-url https://mirrors.ustc.edu.cn/pypi/simple
+RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list.d/debian.sources
+# RUN pip install --break-system-packages -i https://mirrors.ustc.edu.cn/pypi/simple pip -U
+RUN pip config set global.index-url https://mirrors.ustc.edu.cn/pypi/simple
 
 
 # 设置环境变量
