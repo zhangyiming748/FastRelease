@@ -1,0 +1,2 @@
+docker pull golang:latest
+docker run -it golang:latest /bin/bash
