@@ -30,7 +30,8 @@ LABEL authors="zen"
 ENV DEBIAN_FRONTEND=noninteractive
 
 # 更换完整源
-COPY debian.sources /etc/apt/sources.list.d/debian.sources
+RUN sed -i 's/Components: main/Components: main contrib non-free non-free-firmware/' \
+    /etc/apt/sources.list.d/debian.sources
 
 # 更新软件包、安装依赖并清理无用文件
 RUN apt update 
@@ -59,7 +60,7 @@ RUN apt install -y --no-install-recommends btop
 RUN apt install -y --no-install-recommends fonts-wqy-microhei
 RUN apt install -y --no-install-recommends fonts-wqy-zenhei
 RUN apt install -y --no-install-recommends fonts-noto-cjk
-RUN apt install -y --no-install-recommends  libavif-bin
+RUN apt install -y --no-install-recommends libavif-bin
 
 # 从第一阶段复制编译好的二进制文件到最终图像中
 COPY --from=builder1 /BaiduPCS-Go/BaiduPCS /usr/local/bin/BaiduPCS
@@ -69,7 +70,7 @@ COPY --from=builder2 /tdl-go/tdl /usr/local/bin/tdl
 
 # 安装 openai-whisper 和 yt-dlp
 RUN rm /usr/lib/python3.11/EXTERNALLY-MANAGED || true && \
-    pip install --no-cache-dir openai-whisper yt-dlp
+    pip install --break-system-packages --no-cache-dir openai-whisper yt-dlp
 
 
 # 配置 Go 环境
