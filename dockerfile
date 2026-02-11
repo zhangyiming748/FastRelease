@@ -70,7 +70,8 @@ COPY --from=builder2 /tdl-go/tdl /usr/local/bin/tdl
 
 # 安装 openai-whisper 和 yt-dlp
 RUN rm /usr/lib/python3.11/EXTERNALLY-MANAGED || true && \
-    pip install --break-system-packages --no-cache-dir openai-whisper yt-dlp
+    pip install --break-system-packages --no-cache-dir openai-whisper && \
+    pip install --break-system-packages --no-cache-dir -U --pre yt-dlp[default]
 
 
 # 配置 Go 环境
