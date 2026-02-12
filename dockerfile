@@ -61,6 +61,14 @@ RUN apt install -y --no-install-recommends fonts-wqy-microhei
 RUN apt install -y --no-install-recommends fonts-wqy-zenhei
 RUN apt install -y --no-install-recommends fonts-noto-cjk
 RUN apt install -y --no-install-recommends libavif-bin
+RUN apt install -y --no-install-recommends npm
+RUN apt install -y --no-install-recommends gnupg
+
+# 用 npm 全局安装 Deno
+RUN npm install -g deno
+
+# 验证
+RUN deno --version
 
 # 从第一阶段复制编译好的二进制文件到最终图像中
 COPY --from=builder1 /BaiduPCS-Go/BaiduPCS /usr/local/bin/BaiduPCS
