@@ -12,7 +12,7 @@ WORKDIR /BaiduPCS-Go
 RUN ls && go vet && go mod tidy && go mod vendor && go build -o BaiduPCS main.go
 
 # 第二阶段：使用 Golang 编译 tdl
-FROM golang:latest AS builder2
+FROM golang:latest AS builder3
 LABEL authors="zen"
 # 设置非交互模式
 ENV DEBIAN_FRONTEND=noninteractive
@@ -22,7 +22,15 @@ WORKDIR /tdl-go
 # 合并检查、更新依赖和构建操作
 RUN ls && go vet && go mod tidy  && go build -o tdl main.go
 
-# 第三阶段：构建最终镜像
+# 第三阶段：使用 Golang 编译 VideoDualEmbed
+COPY VideoDualEmbed /VideoDualEmbed
+WORKDIR /VideoDualEmbed
+# 合并检查、更新依赖和构建操作
+RUN ls && go vet && go mod tidy  && go build -o vde main.go
+
+
+
+
 FROM golang:latest
 LABEL authors="zen"
 
@@ -34,6 +42,7 @@ RUN sed -i 's/Components: main/Components: main contrib non-free non-free-firmwa
     /etc/apt/sources.list.d/debian.sources
 
 # 更新软件包、安装依赖并清理无用文件
+
 RUN apt update 
 RUN apt full-upgrade -y
 RUN apt install -y --no-install-recommends python3 python3-pip
@@ -75,6 +84,9 @@ COPY --from=builder1 /BaiduPCS-Go/BaiduPCS /usr/local/bin/BaiduPCS
 
 # 从第二阶段复制编译好的二进制文件到最终图像中
 COPY --from=builder2 /tdl-go/tdl /usr/local/bin/tdl
+
+# 从第三阶段复制编译好的vde
+COPY --from=builder3 /VideoDualEmbed/vde /usr/local/bin/vde
 
 # 安装 openai-whisper 和 yt-dlp
 RUN rm /usr/lib/python3.11/EXTERNALLY-MANAGED || true && \

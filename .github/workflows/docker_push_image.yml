@@ -24,6 +24,9 @@ jobs:
       - name: Download tdl
         run: |
           git clone https://github.com/iyear/tdl.git tdl-go
+      - name: Download VideoDualEmbed
+        run: |
+          git clone https://github.com/zhangyiming748/VideoDualEmbed.git VideoDualEmbed
       - name: Extract Docker metadata
         id: meta
         uses: docker/metadata-action@v5
