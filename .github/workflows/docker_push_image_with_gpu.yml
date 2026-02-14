@@ -1,4 +1,4 @@
-name: Publish Docker Image
+name: Publish Docker Image To Dockerhub With GPU
 # This workflow uses actions that are not certified by GitHub.
 on:
   push:
