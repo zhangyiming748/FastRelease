@@ -27,6 +27,9 @@ jobs:
       - name: Download VideoDualEmbed
         run: |
           git clone https://github.com/zhangyiming748/VideoDualEmbed.git VideoDualEmbed
+      - name: Download FastTdl
+        run: |
+          git clone https://github.com/zhangyiming748/tdl-cli.git tdl-cli
       - name: Extract Docker metadata
         id: meta
         uses: docker/metadata-action@v5

@@ -37,6 +37,19 @@ WORKDIR /VideoDualEmbed
 # 合并检查、更新依赖和构建操作
 RUN ls && go vet && go mod tidy && go build -o vde main.go
 
+# 第四阶段： 使用 Golang 编译 fasttdl
+FROM golang:latest AS builder4
+LABEL authors="zen"
+
+# 设置非交互模式
+ENV DEBIAN_FRONTEND=noninteractive
+
+COPY tdl-cli /tdl-cli
+WORKDIR /tdl-cli
+
+# 合并检查、更新依赖和构建操作
+RUN ls && go vet && go mod tidy && go build -o fasttdl main.go
+
 # 最终阶段：构建运行环境
 FROM golang:latest
 LABEL authors="zen"
@@ -106,6 +119,7 @@ RUN npm install -g deno && \
 COPY --from=builder1 /BaiduPCS-Go/BaiduPCS /usr/local/bin/BaiduPCS
 COPY --from=builder2 /tdl-go/tdl /usr/local/bin/tdl
 COPY --from=builder3 /VideoDualEmbed/vde /usr/local/bin/vde
+COPY --from=builder4 /tdl-cli/fasttdl /usr/local/bin/fasttdl
 
 # 安装 Python 依赖
 RUN rm /usr/lib/python3.11/EXTERNALLY-MANAGED || true && \
