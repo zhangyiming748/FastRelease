@@ -29,7 +29,7 @@ jobs:
           git clone https://github.com/zhangyiming748/VideoDualEmbed.git VideoDualEmbed
       - name: Download FastTdl
         run: |
-          git clone https://github.com/zhangyiming748/tdl-cli.git tdl-cli
+          git clone git@github.com:zhangyiming748/FastTdl.git tdl-cli
       - name: Download VideoBatchCut
         run: |
           git clone https://github.com/zhangyiming748/VideoBatchCut.git batch-cut
