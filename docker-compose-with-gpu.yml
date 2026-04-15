@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  fastrelease-gpu:
+    image: zhangyiming748/stand_with_gpu:latest
+    container_name: fastrelease-gpu-container
+    ports:
+      - "8022:22"  # SSH 端口映射
+    volumes:
+      - ./data:/data  # 数据卷挂载
+      - ./config:/config  # 配置文件挂载
+    environment:
+      - LANG=zh_CN.UTF-8
+      - LANGUAGE=zh_CN:zh
+      - LC_ALL=zh_CN.UTF-8
+      - PATH=$PATH:/usr/local/go/bin:/usr/local/cuda/bin
+      - LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
+      - CUDA_HOME=/usr/local/cuda
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    # Docker Compose 普通模式资源限制
+    cpus: 1.0
+    mem_limit: 2g
+    # Docker Swarm 模式资源限制（使用 docker stack deploy 时生效）
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 2G
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    # GPU 设备直通（非 Swarm 模式）
+    runtime: nvidia
+    devices:
+      - /dev/nvidia0:/dev/nvidia0
+      - /dev/nvidiactl:/dev/nvidiactl
+      - /dev/nvidia-uvm:/dev/nvidia-uvm

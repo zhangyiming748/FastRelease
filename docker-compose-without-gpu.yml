@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  fastrelease:
+    image: zhangyiming748/stand:latest
+    container_name: fastrelease-container
+    ports:
+      - "8022:22"  # SSH 端口映射
+    volumes:
+      - ./data:/data  # 数据卷挂载
+      - ./config:/config  # 配置文件挂载
+    environment:
+      - LANG=zh_CN.UTF-8
+      - LANGUAGE=zh_CN:zh
+      - LC_ALL=zh_CN.UTF-8
+      - PATH=$PATH:/usr/local/go/bin
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    # Docker Compose 普通模式资源限制
+    cpus: 1.0
+    mem_limit: 2g
+    # Docker Swarm 模式资源限制（使用 docker stack deploy 时生效）
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 2G
