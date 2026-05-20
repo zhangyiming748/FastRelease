@@ -1,69 +1,3 @@
-# 第一阶段：使用 Golang 编译 BaiduPCS
-FROM golang:latest AS builder1
-LABEL authors="zen"
-
-# 设置非交互模式
-ENV DEBIAN_FRONTEND=noninteractive
-
-COPY BaiduPCS-Go /BaiduPCS-Go
-WORKDIR /BaiduPCS-Go
-
-# 合并检查、更新依赖和构建操作
-RUN ls && go vet && go mod tidy && go mod vendor && go build -o BaiduPCS main.go
-
-# 第二阶段：使用 Golang 编译 tdl
-FROM golang:latest AS builder2
-LABEL authors="zen"
-
-# 设置非交互模式
-ENV DEBIAN_FRONTEND=noninteractive
-
-COPY tdl-go /tdl-go
-WORKDIR /tdl-go
-
-# 合并检查、更新依赖和构建操作
-RUN ls && go vet && go mod tidy && go build -o tdl main.go
-
-# 第三阶段：使用 Golang 编译 VideoDualEmbed
-FROM golang:latest AS builder3
-LABEL authors="zen"
-
-# 设置非交互模式
-ENV DEBIAN_FRONTEND=noninteractive
-
-COPY VideoDualEmbed /VideoDualEmbed
-WORKDIR /VideoDualEmbed
-
-# 合并检查、更新依赖和构建操作
-RUN ls && go vet && go mod tidy && go build -o vde main.go
-
-# 第四阶段： 使用 Golang 编译 fasttdl
-FROM golang:latest AS builder4
-LABEL authors="zen"
-
-# 设置非交互模式
-ENV DEBIAN_FRONTEND=noninteractive
-
-COPY tdl-cli /tdl-cli
-WORKDIR /tdl-cli
-
-# 合并检查、更新依赖和构建操作
-RUN ls && go vet && go mod tidy && go build -o fasttdl main.go
-
-# 第五阶段： 使用 Golang 编译 batch-cut
-FROM golang:latest AS builder5
-LABEL authors="zen"
-
-# 设置非交互模式
-ENV DEBIAN_FRONTEND=noninteractive
-
-COPY batch-cut /batch-cut
-WORKDIR /batch-cut
-
-# 合并检查、更新依赖和构建操作
-RUN ls && go vet && go mod tidy && go build -o batch-cut main.go
-
-# 最终阶段：构建 GPU 运行环境
 FROM nvidia/cuda:13.1.1-cudnn-runtime-ubuntu24.04
 LABEL authors="zen"
 
@@ -141,12 +75,13 @@ RUN npm install -g deno && \
     deno --version
 
 # 复制编译好的二进制文件
+# baidupcs固定连接不可更改
 RUN if [ "$TARGETARCH" = "amd64" ]; then \
       wget -O /tmp/BaiduPCS.zip "https://github.com/qjfoidnh/BaiduPCS-Go/releases/download/v4.0.1/BaiduPCS-Go-v4.0.1-linux-amd64.zip" && \
-      unzip -p /tmp/BaiduPCS.zip BaiduPCS-Go > /usr/local/bin/BaiduPCS && \
+      unzip -p /tmp/BaiduPCS.zip BaiduPCS-Go > /usr/local/bin/BaiduPCS; \
     elif [ "$TARGETARCH" = "arm64" ]; then \
       wget -O /tmp/BaiduPCS.zip "https://github.com/qjfoidnh/BaiduPCS-Go/releases/download/v4.0.1/BaiduPCS-Go-v4.0.1-linux-arm64.zip" && \
-      unzip -p /tmp/BaiduPCS.zip BaiduPCS-Go > /usr/local/bin/BaiduPCS && \
+      unzip -p /tmp/BaiduPCS.zip BaiduPCS-Go > /usr/local/bin/BaiduPCS; \
     fi && \
     chmod +x /usr/local/bin/BaiduPCS && \
     rm -f /tmp/BaiduPCS.zip
