@@ -1,6 +1,6 @@
 FROM nvidia/cuda:13.1.1-cudnn-runtime-ubuntu24.04
 LABEL authors="zen"
-
+ARG TARGETARCH
 # 设置非交互模式
 ENV DEBIAN_FRONTEND=noninteractive
 
