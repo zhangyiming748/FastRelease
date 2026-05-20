@@ -1,7 +1,7 @@
 # 最终阶段：构建运行环境
 FROM debian:trixie
 LABEL authors="zen"
-
+ARG TARGETARCH
 # 设置非交互模式
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -64,11 +64,52 @@ RUN npm install -g deno && \
     deno --version
 
 # 复制编译好的二进制文件
-COPY --from=builder1 /BaiduPCS-Go/BaiduPCS /usr/local/bin/BaiduPCS
-COPY --from=builder2 /tdl-go/tdl /usr/local/bin/tdl
-COPY --from=builder3 /VideoDualEmbed/vde /usr/local/bin/vde
-COPY --from=builder4 /tdl-cli/fasttdl /usr/local/bin/fasttdl
-COPY --from=builder5 /batch-cut/batch-cut /usr/local/bin/batch-cut
+RUN if [ "$TARGETARCH" = "amd64" ]; then \
+      wget -O /tmp/BaiduPCS.zip "https://github.com/qjfoidnh/BaiduPCS-Go/releases/download/v4.0.1/BaiduPCS-Go-v4.0.1-linux-amd64.zip" && \
+      unzip -p /tmp/BaiduPCS.zip BaiduPCS-Go > /usr/local/bin/BaiduPCS && \
+    elif [ "$TARGETARCH" = "arm64" ]; then \
+      wget -O /tmp/BaiduPCS.zip "https://github.com/qjfoidnh/BaiduPCS-Go/releases/download/v4.0.1/BaiduPCS-Go-v4.0.1-linux-arm64.zip" && \
+      unzip -p /tmp/BaiduPCS.zip BaiduPCS-Go > /usr/local/bin/BaiduPCS && \
+    fi && \
+    chmod +x /usr/local/bin/BaiduPCS && \
+    rm -f /tmp/BaiduPCS.zip
+RUN if [ "$TARGETARCH" = "amd64" ]; then \
+      wget -O /tmp/tdl.tar.gz "https://github.com/iyear/tdl/releases/latest/download/tdl_Linux_64bit.tar.gz" && \
+      tar -xzf /tmp/tdl.tar.gz -C /tmp tdl && \
+      mv /tmp/tdl /usr/local/bin/tdl; \
+    elif [ "$TARGETARCH" = "arm64" ]; then \
+      wget -O /tmp/tdl.tar.gz "https://github.com/iyear/tdl/releases/latest/download/tdl_Linux_arm64.tar.gz" && \
+      tar -xzf /tmp/tdl.tar.gz -C /tmp tdl && \
+      mv /tmp/tdl /usr/local/bin/tdl; \
+    fi && \
+    chmod +x /usr/local/bin/tdl && \
+    rm -f /tmp/tdl.tar.gz
+RUN if [ "$TARGETARCH" = "amd64" ]; then \
+      wget -O /usr/local/bin/vde "https://github.com/zhangyiming748/VideoDualEmbed/releases/latest/download/vde_linux_amd64"; \
+    elif [ "$TARGETARCH" = "arm64" ]; then \
+      wget -O /usr/local/bin/vde "https://github.com/zhangyiming748/VideoDualEmbed/releases/latest/download/vde_linux_arm64"; \
+    fi && \
+    chmod +x /usr/local/bin/vde
+RUN if [ "$TARGETARCH" = "amd64" ]; then \
+      wget -O /usr/local/bin/vbc "https://github.com/zhangyiming748/VideoBatchCut/releases/latest/download/vbc_linux_amd64"; \
+    elif [ "$TARGETARCH" = "arm64" ]; then \
+      wget -O /usr/local/bin/vbc "https://github.com/zhangyiming748/VideoBatchCut/releases/latest/download/vbc_linux_arm64"; \
+    fi && \
+    chmod +x /usr/local/bin/vbc
+RUN if [ "$TARGETARCH" = "amd64" ]; then \
+      wget -O /usr/local/bin/my-tdl "https://github.com/zhangyiming748/FastTdl/releases/latest/download/my-tdl_linux_amd64"; \
+    elif [ "$TARGETARCH" = "arm64" ]; then \
+      wget -O /usr/local/bin/my-tdl "https://github.com/zhangyiming748/FastTdl/releases/latest/download/my-tdl_linux_arm64"; \
+    fi && \
+    chmod +x /usr/local/bin/my-tdl
+
+RUN if [ "$TARGETARCH" = "amd64" ]; then \
+      wget -O /usr/local/bin/avmerge "https://github.com/zhangyiming748/AVmerger/releases/latest/download/avmerge_linux_amd64"; \
+    elif [ "$TARGETARCH" = "arm64" ]; then \
+      wget -O /usr/local/bin/avmerge "https://github.com/zhangyiming748/AVmerger/releases/latest/download/avmerge_linux_arm64"; \
+    fi && \
+    chmod +x /usr/local/bin/avmerge
+
 
 # 安装 Python 依赖
 RUN rm /usr/lib/python3.11/EXTERNALLY-MANAGED || true && \

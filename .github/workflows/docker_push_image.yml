@@ -18,21 +18,6 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-      - name: Download BaiduPcs
-        run: |
-          git clone https://github.com/qjfoidnh/BaiduPCS-Go.git BaiduPCS-Go
-      - name: Download tdl
-        run: |
-          git clone https://github.com/iyear/tdl.git tdl-go
-      - name: Download VideoDualEmbed
-        run: |
-          git clone https://github.com/zhangyiming748/VideoDualEmbed.git VideoDualEmbed
-      - name: Download FastTdl
-        run: |
-          git clone https://github.com/zhangyiming748/FastTdl.git tdl-cli
-      - name: Download VideoBatchCut
-        run: |
-          git clone https://github.com/zhangyiming748/VideoBatchCut.git batch-cut
       - name: Extract Docker metadata
         id: meta
         uses: docker/metadata-action@v5
