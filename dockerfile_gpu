@@ -76,17 +76,12 @@ RUN npm install -g deno && \
 
 # 复制编译好的二进制文件
 # baidupcs固定连接不可更改
-RUN if [ "$TARGETARCH" = "amd64" ]; then \
-      wget -O /tmp/BaiduPCS.zip "https://github.com/qjfoidnh/BaiduPCS-Go/releases/latest/download/BaiduPCS-Go-linux-amd64.zip" && \
-      cd /tmp && unzip -o BaiduPCS.zip && \
-      find /tmp -name "BaiduPCS-Go" -type f -executable -exec mv {} /usr/local/bin/BaiduPCS \;; \
-    elif [ "$TARGETARCH" = "arm64" ]; then \
-      wget -O /tmp/BaiduPCS.zip "https://github.com/qjfoidnh/BaiduPCS-Go/releases/latest/download/BaiduPCS-Go-linux-arm64.zip" && \
-      cd /tmp && unzip -o BaiduPCS.zip && \
-      find /tmp -name "BaiduPCS-Go" -type f -executable -exec mv {} /usr/local/bin/BaiduPCS \;; \
-    fi && \
-    chmod +x /usr/local/bin/BaiduPCS && \
-    rm -rf /tmp/BaiduPCS.zip /tmp/BaiduPCS-Go*
+RUN if [ "$TARGETARCH" = "amd64" ]; then wget -O /tmp/BaiduPCS.zip "https://github.com/qjfoidnh/BaiduPCS-Go/releases/latest/download/BaiduPCS-Go-linux-amd64.zip"; elif [ "$TARGETARCH" = "arm64" ]; then wget -O /tmp/BaiduPCS.zip "https://github.com/qjfoidnh/BaiduPCS-Go/releases/latest/download/BaiduPCS-Go-linux-arm64.zip"; fi
+RUN cd /tmp && unzip -o BaiduPCS.zip
+RUN mv $(find /tmp -name "BaiduPCS-Go" -type f) /usr/local/bin/BaiduPCS
+RUN chmod +x /usr/local/bin/BaiduPCS
+RUN rm -rf /tmp/BaiduPCS.zip /tmp/BaiduPCS-Go*
+
 RUN if [ "$TARGETARCH" = "amd64" ]; then \
       wget -O /tmp/tdl.tar.gz "https://github.com/iyear/tdl/releases/latest/download/tdl_Linux_64bit.tar.gz" && \
       tar -xzf /tmp/tdl.tar.gz -C /tmp tdl && \
@@ -98,18 +93,21 @@ RUN if [ "$TARGETARCH" = "amd64" ]; then \
     fi && \
     chmod +x /usr/local/bin/tdl && \
     rm -f /tmp/tdl.tar.gz
+
 RUN if [ "$TARGETARCH" = "amd64" ]; then \
       wget -O /usr/local/bin/vde "https://github.com/zhangyiming748/VideoDualEmbed/releases/latest/download/vde_linux_amd64"; \
     elif [ "$TARGETARCH" = "arm64" ]; then \
       wget -O /usr/local/bin/vde "https://github.com/zhangyiming748/VideoDualEmbed/releases/latest/download/vde_linux_arm64"; \
     fi && \
     chmod +x /usr/local/bin/vde
+
 RUN if [ "$TARGETARCH" = "amd64" ]; then \
       wget -O /usr/local/bin/vbc "https://github.com/zhangyiming748/VideoBatchCut/releases/latest/download/vbc_linux_amd64"; \
     elif [ "$TARGETARCH" = "arm64" ]; then \
       wget -O /usr/local/bin/vbc "https://github.com/zhangyiming748/VideoBatchCut/releases/latest/download/vbc_linux_arm64"; \
     fi && \
     chmod +x /usr/local/bin/vbc
+    
 RUN if [ "$TARGETARCH" = "amd64" ]; then \
       wget -O /usr/local/bin/my-tdl "https://github.com/zhangyiming748/FastTdl/releases/latest/download/my-tdl_linux_amd64"; \
     elif [ "$TARGETARCH" = "arm64" ]; then \
