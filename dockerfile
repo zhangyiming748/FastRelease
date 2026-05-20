@@ -66,7 +66,7 @@ RUN npm install -g deno && \
 
 # 复制编译好的二进制文件
 # baidupcs固定连接不可更改
-RUN if [ "$TARGETARCH" = "amd64" ]; then wget -O /tmp/BaiduPCS.zip "https://github.com/qjfoidnh/BaiduPCS-Go/releases/download/v4.0.1/BaiduPCS-Go-v4.0.1-linux-amd64.zip"; elif [ "$TARGETARCH" = "arm64" ]; then wget -O /tmp/BaiduPCS.zip "https://github.com/qjfoidnh/BaiduPCS-Go/releases/latest/download/BaiduPCS-Go-linux-arm64.zip"; fi
+RUN if [ "$TARGETARCH" = "amd64" ]; then wget -O /tmp/BaiduPCS.zip "https://github.com/qjfoidnh/BaiduPCS-Go/releases/download/v4.0.1/BaiduPCS-Go-v4.0.1-linux-amd64.zip"; elif [ "$TARGETARCH" = "arm64" ]; then wget -O /tmp/BaiduPCS.zip "https://github.com/qjfoidnh/BaiduPCS-Go/releases/download/v4.0.1/BaiduPCS-Go-v4.0.1-linux-arm64.zip"; fi
 RUN cd /tmp && unzip -o BaiduPCS.zip
 RUN mv $(find /tmp -name "BaiduPCS-Go" -type f) /usr/local/bin/BaiduPCS
 RUN chmod +x /usr/local/bin/BaiduPCS
