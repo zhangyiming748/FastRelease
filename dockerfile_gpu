@@ -82,45 +82,23 @@ RUN mv $(find /tmp -name "BaiduPCS-Go" -type f) /usr/local/bin/BaiduPCS
 RUN chmod +x /usr/local/bin/BaiduPCS
 RUN rm -rf /tmp/BaiduPCS.zip /tmp/BaiduPCS-Go*
 
-RUN if [ "$TARGETARCH" = "amd64" ]; then \
-      wget -O /tmp/tdl.tar.gz "https://github.com/iyear/tdl/releases/latest/download/tdl_Linux_64bit.tar.gz" && \
-      tar -xzf /tmp/tdl.tar.gz -C /tmp tdl && \
-      mv /tmp/tdl /usr/local/bin/tdl; \
-    elif [ "$TARGETARCH" = "arm64" ]; then \
-      wget -O /tmp/tdl.tar.gz "https://github.com/iyear/tdl/releases/latest/download/tdl_Linux_arm64.tar.gz" && \
-      tar -xzf /tmp/tdl.tar.gz -C /tmp tdl && \
-      mv /tmp/tdl /usr/local/bin/tdl; \
-    fi && \
-    chmod +x /usr/local/bin/tdl && \
-    rm -f /tmp/tdl.tar.gz
+RUN if [ "$TARGETARCH" = "amd64" ]; then wget -O /tmp/tdl.tar.gz "https://github.com/iyear/tdl/releases/latest/download/tdl_Linux_64bit.tar.gz"; elif [ "$TARGETARCH" = "arm64" ]; then wget -O /tmp/tdl.tar.gz "https://github.com/iyear/tdl/releases/latest/download/tdl_Linux_arm64.tar.gz"; fi
+RUN tar -xzf /tmp/tdl.tar.gz -C /tmp tdl
+RUN mv /tmp/tdl /usr/local/bin/tdl
+RUN chmod +x /usr/local/bin/tdl
+RUN rm -f /tmp/tdl.tar.gz
 
-RUN if [ "$TARGETARCH" = "amd64" ]; then \
-      wget -O /usr/local/bin/vde "https://github.com/zhangyiming748/VideoDualEmbed/releases/latest/download/vde_linux_amd64"; \
-    elif [ "$TARGETARCH" = "arm64" ]; then \
-      wget -O /usr/local/bin/vde "https://github.com/zhangyiming748/VideoDualEmbed/releases/latest/download/vde_linux_arm64"; \
-    fi && \
-    chmod +x /usr/local/bin/vde
+RUN if [ "$TARGETARCH" = "amd64" ]; then wget -O /usr/local/bin/vde "https://github.com/zhangyiming748/VideoDualEmbed/releases/latest/download/vde_linux_amd64"; elif [ "$TARGETARCH" = "arm64" ]; then wget -O /usr/local/bin/vde "https://github.com/zhangyiming748/VideoDualEmbed/releases/latest/download/vde_linux_arm64"; fi
+RUN chmod +x /usr/local/bin/vde
 
-RUN if [ "$TARGETARCH" = "amd64" ]; then \
-      wget -O /usr/local/bin/vbc "https://github.com/zhangyiming748/VideoBatchCut/releases/latest/download/vbc_linux_amd64"; \
-    elif [ "$TARGETARCH" = "arm64" ]; then \
-      wget -O /usr/local/bin/vbc "https://github.com/zhangyiming748/VideoBatchCut/releases/latest/download/vbc_linux_arm64"; \
-    fi && \
-    chmod +x /usr/local/bin/vbc
+RUN if [ "$TARGETARCH" = "amd64" ]; then wget -O /usr/local/bin/vbc "https://github.com/zhangyiming748/VideoBatchCut/releases/latest/download/vbc_linux_amd64"; elif [ "$TARGETARCH" = "arm64" ]; then wget -O /usr/local/bin/vbc "https://github.com/zhangyiming748/VideoBatchCut/releases/latest/download/vbc_linux_arm64"; fi
+RUN chmod +x /usr/local/bin/vbc
     
-RUN if [ "$TARGETARCH" = "amd64" ]; then \
-      wget -O /usr/local/bin/my-tdl "https://github.com/zhangyiming748/FastTdl/releases/latest/download/my-tdl_linux_amd64"; \
-    elif [ "$TARGETARCH" = "arm64" ]; then \
-      wget -O /usr/local/bin/my-tdl "https://github.com/zhangyiming748/FastTdl/releases/latest/download/my-tdl_linux_arm64"; \
-    fi && \
-    chmod +x /usr/local/bin/my-tdl
+RUN if [ "$TARGETARCH" = "amd64" ]; then wget -O /usr/local/bin/my-tdl "https://github.com/zhangyiming748/FastTdl/releases/latest/download/my-tdl_linux_amd64"; elif [ "$TARGETARCH" = "arm64" ]; then wget -O /usr/local/bin/my-tdl "https://github.com/zhangyiming748/FastTdl/releases/latest/download/my-tdl_linux_arm64"; fi
+RUN chmod +x /usr/local/bin/my-tdl
 
-RUN if [ "$TARGETARCH" = "amd64" ]; then \
-      wget -O /usr/local/bin/avmerge "https://github.com/zhangyiming748/AVmerger/releases/latest/download/avmerge_linux_amd64"; \
-    elif [ "$TARGETARCH" = "arm64" ]; then \
-      wget -O /usr/local/bin/avmerge "https://github.com/zhangyiming748/AVmerger/releases/latest/download/avmerge_linux_arm64"; \
-    fi && \
-    chmod +x /usr/local/bin/avmerge
+RUN if [ "$TARGETARCH" = "amd64" ]; then wget -O /usr/local/bin/avmerge "https://github.com/zhangyiming748/AVmerger/releases/latest/download/avmerge_linux_amd64"; elif [ "$TARGETARCH" = "arm64" ]; then wget -O /usr/local/bin/avmerge "https://github.com/zhangyiming748/AVmerger/releases/latest/download/avmerge_linux_arm64"; fi
+RUN chmod +x /usr/local/bin/avmerge
 
 
 
