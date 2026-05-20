@@ -33,7 +33,8 @@ RUN apt update && \
         locales \
         wget \
         curl \
-        gnupg && \
+        gnupg \
+        unzip && \
     # 多媒体处理工具
     apt install -y --no-install-recommends \
         ffmpeg \
