@@ -67,13 +67,15 @@ RUN npm install -g deno && \
 # baidupcs固定连接不可更改
 RUN if [ "$TARGETARCH" = "amd64" ]; then \
       wget -O /tmp/BaiduPCS.zip "https://github.com/qjfoidnh/BaiduPCS-Go/releases/download/v4.0.1/BaiduPCS-Go-v4.0.1-linux-amd64.zip" && \
-      unzip -p /tmp/BaiduPCS.zip BaiduPCS-Go > /usr/local/bin/BaiduPCS; \
+      cd /tmp && unzip -o BaiduPCS.zip && \
+      find /tmp -name "BaiduPCS-Go" -type f -executable -exec mv {} /usr/local/bin/BaiduPCS \;; \
     elif [ "$TARGETARCH" = "arm64" ]; then \
-      wget -O /tmp/BaiduPCS.zip "https://github.com/qjfoidnh/BaiduPCS-Go/releases/download/v4.0.1/BaiduPCS-Go-v4.0.1-linux-arm64.zip" && \
-      unzip -p /tmp/BaiduPCS.zip BaiduPCS-Go > /usr/local/bin/BaiduPCS; \
+      wget -O /tmp/BaiduPCS.zip "https://github.com/qjfoidnh/BaiduPCS-Go/releases/latest/download/BaiduPCS-Go-linux-arm64.zip" && \
+      cd /tmp && unzip -o BaiduPCS.zip && \
+      find /tmp -name "BaiduPCS-Go" -type f -executable -exec mv {} /usr/local/bin/BaiduPCS \;; \
     fi && \
     chmod +x /usr/local/bin/BaiduPCS && \
-    rm -f /tmp/BaiduPCS.zip
+    rm -rf /tmp/BaiduPCS.zip /tmp/BaiduPCS-Go*
 RUN if [ "$TARGETARCH" = "amd64" ]; then \
       wget -O /tmp/tdl.tar.gz "https://github.com/iyear/tdl/releases/latest/download/tdl_Linux_64bit.tar.gz" && \
       tar -xzf /tmp/tdl.tar.gz -C /tmp tdl && \
