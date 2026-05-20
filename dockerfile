@@ -77,6 +77,13 @@ RUN mv /tmp/tdl /usr/local/bin/tdl
 RUN chmod +x /usr/local/bin/tdl
 RUN rm -f /tmp/tdl.tar.gz
 
+# 安装 aliyunpan
+RUN if [ "$TARGETARCH" = "amd64" ]; then wget -O /tmp/aliyunpan.zip "https://github.com/tickstep/aliyunpan/releases/download/v0.3.9/aliyunpan-v0.3.9-linux-amd64.zip"; elif [ "$TARGETARCH" = "arm64" ]; then wget -O /tmp/aliyunpan.zip "https://github.com/tickstep/aliyunpan/releases/download/v0.3.9/aliyunpan-v0.3.9-linux-arm64.zip"; fi
+RUN cd /tmp && unzip -o aliyunpan.zip
+RUN mv $(find /tmp -name "aliyunpan" -type f) /usr/local/bin/aliyunpan
+RUN chmod +x /usr/local/bin/aliyunpan
+RUN rm -rf /tmp/aliyunpan.zip /tmp/aliyunpan*
+
 RUN if [ "$TARGETARCH" = "amd64" ]; then wget -O /usr/local/bin/vde "https://github.com/zhangyiming748/VideoDualEmbed/releases/latest/download/vde_linux_amd64"; elif [ "$TARGETARCH" = "arm64" ]; then wget -O /usr/local/bin/vde "https://github.com/zhangyiming748/VideoDualEmbed/releases/latest/download/vde_linux_arm64"; fi
 RUN chmod +x /usr/local/bin/vde
 
