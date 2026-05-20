@@ -89,16 +89,10 @@ RUN chmod +x /usr/local/bin/my-tdl
 RUN if [ "$TARGETARCH" = "amd64" ]; then wget -O /usr/local/bin/avmerge "https://github.com/zhangyiming748/AVmerger/releases/latest/download/avmerge_linux_amd64"; elif [ "$TARGETARCH" = "arm64" ]; then wget -O /usr/local/bin/avmerge "https://github.com/zhangyiming748/AVmerger/releases/latest/download/avmerge_linux_arm64"; fi
 RUN chmod +x /usr/local/bin/avmerge
 
-
 # 安装 Python 依赖
 RUN rm /usr/lib/python3.11/EXTERNALLY-MANAGED || true && \
     pip install --break-system-packages --no-cache-dir openai-whisper && \
     pip install --break-system-packages --no-cache-dir -U --pre yt-dlp[default]
-
-# 配置 Go 环境变量
-RUN go env -w GO111MODULE=on && \
-    go env -w GOPROXY=https://goproxy.cn,direct && \
-    go env -w GOBIN=/go/bin
 
 # 配置中文语言支持
 RUN apt update && \
