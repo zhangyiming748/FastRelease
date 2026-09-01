@@ -23,10 +23,10 @@ RUN apt update && \
         wget \
         curl \
         gnupg \
-        unzip && \
-    # 多媒体处理工具
+        unzip \
+        xz-utils && \
+    # 多媒体处理工具（FFmpeg 改用静态编译版，见下方独立安装步骤）
     apt install -y --no-install-recommends \
-        ffmpeg \
         mediainfo \
         libavif-bin && \
     # 文本处理和转换工具
@@ -63,6 +63,16 @@ RUN apt update && \
 # 安装 Node.js 工具
 RUN npm install -g deno && \
     deno --version
+
+# 安装静态编译版 FFmpeg（BtbN 构建，自带全部依赖库，不依赖系统库版本）
+RUN if [ "$TARGETARCH" = "amd64" ]; then FF_ARCH="linux64"; elif [ "$TARGETARCH" = "arm64" ]; then FF_ARCH="linuxarm64"; fi && \
+    wget -O /tmp/ffmpeg.tar.xz "https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-${FF_ARCH}-gpl.tar.xz" && \
+    tar -xJf /tmp/ffmpeg.tar.xz -C /tmp && \
+    mv $(find /tmp -maxdepth 3 -name "ffmpeg" -type f) /usr/local/bin/ffmpeg && \
+    mv $(find /tmp -maxdepth 3 -name "ffprobe" -type f) /usr/local/bin/ffprobe && \
+    chmod +x /usr/local/bin/ffmpeg /usr/local/bin/ffprobe && \
+    rm -rf /tmp/ffmpeg.tar.xz /tmp/ffmpeg-* && \
+    ffmpeg -version
 
 # 复制编译好的二进制文件
 # baidupcs固定连接不可更改
