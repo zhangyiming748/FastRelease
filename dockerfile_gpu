@@ -86,12 +86,18 @@ RUN if [ "$TARGETARCH" = "amd64" ]; then FF_ARCH="linux64"; elif [ "$TARGETARCH"
     ffmpeg -version
 
 # 复制编译好的二进制文件
-# baidupcs固定连接不可更改
-RUN if [ "$TARGETARCH" = "amd64" ]; then wget -O /tmp/BaiduPCS.zip "https://github.com/qjfoidnh/BaiduPCS-Go/releases/download/v4.0.1/BaiduPCS-Go-v4.0.1-linux-amd64.zip"; elif [ "$TARGETARCH" = "arm64" ]; then wget -O /tmp/BaiduPCS.zip "https://github.com/qjfoidnh/BaiduPCS-Go/releases/download/v4.0.1/BaiduPCS-Go-v4.0.1-linux-arm64.zip"; fi
-RUN cd /tmp && unzip -o BaiduPCS.zip
-RUN mv $(find /tmp -name "BaiduPCS-Go" -type f) /usr/local/bin/BaiduPCS
-RUN chmod +x /usr/local/bin/BaiduPCS
-RUN rm -rf /tmp/BaiduPCS.zip /tmp/BaiduPCS-Go*
+# baidupcs 始终下载最新 release（资源文件名含版本号，先通过 latest 重定向解析 tag）
+# 若下载或安装失败仅打印警告并跳过，不中断镜像构建（镜像中将缺少 BaiduPCS）
+RUN BP_TAG=$(curl -sIL -o /dev/null -w '%{url_effective}' https://github.com/qjfoidnh/BaiduPCS-Go/releases/latest | sed 's|.*/tag/||') && \
+    if wget -O /tmp/BaiduPCS.zip "https://github.com/qjfoidnh/BaiduPCS-Go/releases/download/${BP_TAG}/BaiduPCS-Go-${BP_TAG}-linux-${TARGETARCH}.zip" && \
+        unzip -o /tmp/BaiduPCS.zip -d /tmp && \
+        mv $(find /tmp -name "BaiduPCS-Go" -type f) /usr/local/bin/BaiduPCS && \
+        chmod +x /usr/local/bin/BaiduPCS; then \
+        echo "BaiduPCS ${BP_TAG} installed"; \
+    else \
+        echo "WARNING: BaiduPCS download/install failed (tag=${BP_TAG:-unresolved}), BaiduPCS will be missing in the image"; \
+    fi; \
+    rm -rf /tmp/BaiduPCS.zip /tmp/BaiduPCS-Go*
 
 RUN if [ "$TARGETARCH" = "amd64" ]; then wget -O /tmp/tdl.tar.gz "https://github.com/iyear/tdl/releases/latest/download/tdl_Linux_64bit.tar.gz"; elif [ "$TARGETARCH" = "arm64" ]; then wget -O /tmp/tdl.tar.gz "https://github.com/iyear/tdl/releases/latest/download/tdl_Linux_arm64.tar.gz"; fi
 RUN tar -xzf /tmp/tdl.tar.gz -C /tmp tdl
@@ -99,12 +105,18 @@ RUN mv /tmp/tdl /usr/local/bin/tdl
 RUN chmod +x /usr/local/bin/tdl
 RUN rm -f /tmp/tdl.tar.gz
 
-# 安装 aliyunpan
-RUN if [ "$TARGETARCH" = "amd64" ]; then wget -O /tmp/aliyunpan.zip "https://github.com/tickstep/aliyunpan/releases/download/v0.3.9/aliyunpan-v0.3.9-linux-amd64.zip"; elif [ "$TARGETARCH" = "arm64" ]; then wget -O /tmp/aliyunpan.zip "https://github.com/tickstep/aliyunpan/releases/download/v0.3.9/aliyunpan-v0.3.9-linux-arm64.zip"; fi
-RUN cd /tmp && unzip -o aliyunpan.zip
-RUN mv $(find /tmp -name "aliyunpan" -type f) /usr/local/bin/aliyunpan
-RUN chmod +x /usr/local/bin/aliyunpan
-RUN rm -rf /tmp/aliyunpan.zip /tmp/aliyunpan*
+# 安装 aliyunpan（始终下载最新 release，资源文件名含版本号，先通过 latest 重定向解析 tag）
+# 若下载或安装失败仅打印警告并跳过，不中断镜像构建（镜像中将缺少 aliyunpan）
+RUN AY_TAG=$(curl -sIL -o /dev/null -w '%{url_effective}' https://github.com/tickstep/aliyunpan/releases/latest | sed 's|.*/tag/||') && \
+    if wget -O /tmp/aliyunpan.zip "https://github.com/tickstep/aliyunpan/releases/download/${AY_TAG}/aliyunpan-${AY_TAG}-linux-${TARGETARCH}.zip" && \
+        unzip -o /tmp/aliyunpan.zip -d /tmp && \
+        mv $(find /tmp -name "aliyunpan" -type f) /usr/local/bin/aliyunpan && \
+        chmod +x /usr/local/bin/aliyunpan; then \
+        echo "aliyunpan ${AY_TAG} installed"; \
+    else \
+        echo "WARNING: aliyunpan download/install failed (tag=${AY_TAG:-unresolved}), aliyunpan will be missing in the image"; \
+    fi; \
+    rm -rf /tmp/aliyunpan.zip /tmp/aliyunpan*
 
 RUN if [ "$TARGETARCH" = "amd64" ]; then wget -O /usr/local/bin/vde "https://github.com/zhangyiming748/VideoDualEmbed/releases/latest/download/vde_linux_amd64"; elif [ "$TARGETARCH" = "arm64" ]; then wget -O /usr/local/bin/vde "https://github.com/zhangyiming748/VideoDualEmbed/releases/latest/download/vde_linux_arm64"; fi
 RUN chmod +x /usr/local/bin/vde
