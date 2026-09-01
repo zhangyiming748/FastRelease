@@ -133,7 +133,7 @@ RUN apt update && \
     apt clean && \
     rm -rf /var/lib/apt/lists/*
 
-# 配置国内镜像源
+# 最后一步换源：构建全程使用官方源，仅把成品镜像内的 apt/pip 源换成中科大，方便镜像使用者后续安装软件
 RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list.d/debian.sources && \
     pip config set global.index-url https://mirrors.ustc.edu.cn/pypi/simple
 
