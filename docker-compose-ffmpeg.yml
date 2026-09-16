@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  ffmpeg:
+    build:
+      context: .
+      dockerfile: dockerfile_ffmpeg
+      args:
+        FFMPEG_VERSION: n9.0.1
+    image: zhangyiming748/ffmpeg:latest
+    container_name: ffmpeg-container
+    # 挂载宿主机 DRI 设备，启用 VA-API 硬件加速
+    devices:
+      - /dev/dri:/dev/dri
+    # 如需组权限（例如宿主机 render 组），可放开下面一项
+    # group_add:
+    #   - "109"  # render 组 GID，按宿主机实际情况调整
+    volumes:
+      - ./data:/data           # 输入/输出媒体文件挂载
+      - ./transcode:/transcode # 转码临时目录
+    environment:
+      - LANG=zh_CN.UTF-8
+      - LANGUAGE=zh_CN:zh
+      - LC_ALL=zh_CN.UTF-8
+      # PATH / LD_LIBRARY_PATH 已由 Dockerfile ENV 固化，此处不再覆盖
+      # 若宿主机是 AMD/NVIDIA 或需要切换驱动，可覆盖为 mesa/nvidia
+      - LIBVA_DRIVER_NAME=iHD
+    working_dir: /src
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    # Docker Compose 普通模式资源限制
+    cpus: 2.0
+    mem_limit: 4g
+    shm_size: 1gb
+    # Docker Swarm 模式资源限制（使用 docker stack deploy 时生效）
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 4G

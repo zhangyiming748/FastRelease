@@ -1,0 +1,68 @@
+# ========== 编译阶段 ==========
+FROM ubuntu:26.04 AS builder
+
+ARG DEBIAN_FRONTEND=noninteractive
+ARG FFMPEG_VERSION=n9.0.1
+
+# 安装编译依赖
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential yasm nasm cmake git pkg-config autoconf automake libtool \
+    libva-dev libdrm-dev libx11-dev libxext-dev libxfixes-dev \
+    libx264-dev libx265-dev libvpx-dev libvorbis-dev libopus-dev \
+    libmp3lame-dev libfdk-aac-dev libass-dev libfreetype6-dev \
+    libtheora-dev libvorbis-dev libxcb1-dev libxcb-shm0-dev libxcb-xfixes0-dev \
+    zlib1g-dev texinfo wget && \
+    rm -rf /var/lib/apt/lists/*
+
+WORKDIR /src
+RUN git clone --depth 1 --branch ${FFMPEG_VERSION} https://github.com/FFmpeg/FFmpeg.git ffmpeg
+
+WORKDIR /src/ffmpeg
+RUN ./configure \
+    --prefix=/opt/ffmpeg \
+    --enable-gpl \
+    --enable-nonfree \
+    --enable-shared \
+    --enable-vaapi \
+    --enable-libdrm \
+    --enable-libx264 \
+    --enable-libx265 \
+    --enable-libvpx \
+    --enable-libvorbis \
+    --enable-libopus \
+    --enable-libmp3lame \
+    --enable-libfdk-aac \
+    --enable-libass \
+    --enable-libfreetype \
+    --enable-libtheora \
+    --enable-decoder=h264_vaapi,hevc_vaapi,vp9_vaapi,av1_vaapi \
+    --enable-encoder=h264_vaapi,hevc_vaapi,vp9_vaapi,av1_vaapi \
+    && make -j$(nproc) && make install
+
+# ========== 运行阶段 ==========
+FROM ubuntu:26.04
+
+ARG DEBIAN_FRONTEND=noninteractive
+
+# 只装运行时依赖 + VA-API 驱动
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libva2 libva-drm2 libva-x11-2 libdrm2 \
+    intel-media-va-driver-non-free \
+    i965-va-driver \
+    vainfo \
+    libx264-164 libx265-199 \
+    libvpx7 libopus0 libmp3lame0 libfdk-aac2 \
+    libass9 libfreetype6 libtheora0 libvorbis0a \
+    zlib1g && \
+    rm -rf /var/lib/apt/lists/*
+
+# 从编译阶段拷贝 FFmpeg
+COPY --from=builder /opt/ffmpeg /opt/ffmpeg
+
+ENV PATH=/opt/ffmpeg/bin:$PATH
+ENV LD_LIBRARY_PATH=/opt/ffmpeg/lib:$LD_LIBRARY_PATH
+ENV LIBVA_DRIVER_NAME=iHD
+
+# 保持容器常驻,方便通过 docker exec 进入使用 ffmpeg
+WORKDIR /src
+CMD ["sleep", "infinity"]
