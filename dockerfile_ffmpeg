@@ -39,25 +39,32 @@ RUN ./configure \
     --enable-encoder=h264_vaapi,hevc_vaapi,vp9_vaapi,av1_vaapi \
     && make -j$(nproc) && make install
 
+# 自动探测 ffmpeg 二进制/共享库真正依赖的运行时包名，避免在不同 Ubuntu 版本
+# 上硬编码 libx264-164 / libvpx7 等 SO 版本号导致 apt 找不到包
+RUN ldd /opt/ffmpeg/bin/* /opt/ffmpeg/lib/*.so* 2>/dev/null \
+      | awk '/=> \// {print $3}' | sort -u \
+      | xargs -r dpkg -S 2>/dev/null \
+      | cut -d: -f1 | sort -u \
+      | grep -E '^lib' | grep -v -- '-dev$' \
+      > /opt/ffmpeg-runtime-packages.txt
+
 # ========== 运行阶段 ==========
 FROM ubuntu:26.04
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-# 只装运行时依赖 + VA-API 驱动
+# 从编译阶段拷贝 FFmpeg 与自动生成的运行时依赖清单
+COPY --from=builder /opt/ffmpeg /opt/ffmpeg
+COPY --from=builder /opt/ffmpeg-runtime-packages.txt /tmp/ffmpeg-runtime-packages.txt
+
+# 只装运行时依赖 + VA-API 驱动（lib* 部分由上一步自动探测得出）
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libva2 libva-drm2 libva-x11-2 libdrm2 \
     intel-media-va-driver-non-free \
     i965-va-driver \
     vainfo \
-    libx264-164 libx265-199 \
-    libvpx7 libopus0 libmp3lame0 libfdk-aac2 \
-    libass9 libfreetype6 libtheora0 libvorbis0a \
-    zlib1g && \
-    rm -rf /var/lib/apt/lists/*
-
-# 从编译阶段拷贝 FFmpeg
-COPY --from=builder /opt/ffmpeg /opt/ffmpeg
+    $(cat /tmp/ffmpeg-runtime-packages.txt | tr '\n' ' ') && \
+    rm -rf /var/lib/apt/lists/* /tmp/ffmpeg-runtime-packages.txt
 
 ENV PATH=/opt/ffmpeg/bin:$PATH
 ENV LD_LIBRARY_PATH=/opt/ffmpeg/lib:$LD_LIBRARY_PATH
