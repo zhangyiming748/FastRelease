@@ -24,6 +24,12 @@ services:
     restart: unless-stopped
     stdin_open: true
     tty: true
+    # 启动时下载最新版 archiver 二进制，然后保持容器常驻
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        curl -fsSL https://github.com/zhangyiming748/archiver/releases/latest/download/archiver_linux_amd64 -o /usr/local/bin/archiver && chmod +x /usr/local/bin/archiver
+        exec sleep infinity
     # Docker Compose 普通模式资源限制
     cpus: 2.0
     mem_limit: 4g

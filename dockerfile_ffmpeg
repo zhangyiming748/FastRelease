@@ -64,6 +64,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     intel-media-va-driver-non-free \
     i965-va-driver \
     vainfo \
+    curl wget mediainfo \
     $(cat /tmp/ffmpeg-runtime-packages.txt | tr '\n' ' ') && \
     rm -rf /var/lib/apt/lists/* /tmp/ffmpeg-runtime-packages.txt
 
