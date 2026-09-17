@@ -6,6 +6,7 @@ ARG FFMPEG_VERSION=n9.0.1
 
 # 安装编译依赖
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
     build-essential yasm nasm cmake git pkg-config autoconf automake libtool \
     libva-dev libdrm-dev libx11-dev libxext-dev libxfixes-dev \
     libx264-dev libx265-dev libvpx-dev libvorbis-dev libopus-dev \
