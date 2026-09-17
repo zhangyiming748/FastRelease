@@ -2,11 +2,6 @@ version: '3.8'
 
 services:
   ffmpeg:
-    build:
-      context: .
-      dockerfile: dockerfile_ffmpeg
-      args:
-        FFMPEG_VERSION: n9.0.1
     image: zhangyiming748/ffmpeg:latest
     container_name: ffmpeg-container
     # 挂载宿主机 DRI 设备，启用 VA-API 硬件加速
