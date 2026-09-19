@@ -1,0 +1,39 @@
+name: Publish yt-dlp Docker Image To Dockerhub
+# This workflow uses actions that are not certified by GitHub.
+on:
+  push:
+    tags:
+      - 'ytdlp*'
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v4
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v6
+        with:
+          images: zhangyiming748/yt-dlp
+          tags: |
+            type=match,pattern=ytdlp-?(.+),group=1
+            type=raw,value=latest
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: dockerfile_ytldlp
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          platforms: |
+            linux/amd64
+            linux/arm64

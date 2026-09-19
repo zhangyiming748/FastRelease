@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  yt-dlp:
+    image: zhangyiming748/yt-dlp:latest
+    container_name: yt-dlp-container
+    volumes:
+      - ./downloads:/downloads   # 下载文件与 cookies 挂载目录
+    environment:
+      - LANG=zh_CN.UTF-8
+      - LANGUAGE=zh_CN:zh
+      - LC_ALL=zh_CN.UTF-8
+    working_dir: /downloads
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    # Dockerfile 已固化 CMD ["sleep","infinity"]，容器保持常驻
+    # 使用：docker exec -it yt-dlp-container yt-dlp <url>
+    #      docker exec -it yt-dlp-container /bin/bash
+    # Docker Compose 普通模式资源限制
+    cpus: 2.0
+    mem_limit: 4g
+    shm_size: 1gb
+    # Docker Swarm 模式资源限制（使用 docker stack deploy 时生效）
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 4G

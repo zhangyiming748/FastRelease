@@ -1,0 +1,15 @@
+FROM python:3.14.7-slim-trixie
+RUN pip config set global.index-url https://mirrors.ustc.edu.cn/pypi/simple
+# nightly 版 yt-dlp + default/curl-cffi 扩展，一次装完并清缓存
+RUN pip install --no-cache-dir -U --pre "yt-dlp[default,curl-cffi]"
+
+# yt-dlp 合并音视频流需要 ffmpeg
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends ffmpeg && \
+    rm -rf /var/lib/apt/lists/*
+# 添加默认配置，使 yt-dlp 默认带 --impersonate chrome 参数
+RUN mkdir -p /root/.config/yt-dlp && echo '--impersonate chrome' > /root/.config/yt-dlp/config
+# 保持容器常驻，方便通过 docker exec 进入使用 yt-dlp
+CMD ["sleep", "infinity"]
+# docker run -it --rm --name yt-dlp --entrypoint /bin/bash  yt-dlp
+# yt-dlp --cookies ".\Downloads\cookies (1).txt" --impersonate chrome -F "https://www..com"
